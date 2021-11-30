@@ -14,10 +14,10 @@ def index():
     posts = [
         {
             'author': {'username': 'testowy'},
-            'body': 'Testowe zgloszenie xd!'
+            'body': 'W tej zakładce powinny być wszystkie stworzone RW!'
         }
     ]
-    return render_template("index.html", title='Home Page', posts=posts)
+    return render_template("index.html", title='Strona główna', posts=posts)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -35,7 +35,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', title='Zaloguj się', form=form)
 
 
 @app.route('/logout')
@@ -56,7 +56,7 @@ def register():
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Zarejestruj się', form=form)
 
 
 @app.route('/user/<username>')
