@@ -17,7 +17,7 @@ def index():
             'body': 'W tej zakładce powinny być wszystkie stworzone RW!'
         }
     ]
-    return render_template("index.html", title='Strona główna', posts=posts)
+    return render_template("index.html", title='Wszystkie RW', posts=posts)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -64,10 +64,9 @@ def register():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
+        {'author': user, 'body': 'Tutaj pojawią sie RW zgłoszone przez zalogowanego'},
     ]
-    return render_template('user.html', user=user, posts=posts)
+    return render_template('user.html', user=user, title='Zgłoszone RW', posts=posts)
 
 
 @app.route('/new_registration', methods=['GET', 'POST'])
