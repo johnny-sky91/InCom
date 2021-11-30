@@ -1,0 +1,32 @@
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - InCom</title>
+        {% else %}
+        <title>InCom</title>
+        {% endif %}
+    </head>
+    <body>
+            <div>
+              <a href="{{ url_for('index') }}">Wszystkie RW</a>
+              {% if current_user.is_anonymous %}
+              <a href="{{ url_for('login') }}">Zaloguj się</a>
+              {% else %}
+              <a href="{{ url_for('user', username=current_user.username) }}">Zgłoszone RW</a>
+              <a href="{{ url_for('new_registration')}}">Nowe RW</a>
+              <a href="{{ url_for('logout') }}">Wyloguj się</a>
+              {% endif %}
+            </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>

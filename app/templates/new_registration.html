@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Dział: {{ current_user.username }} </h1>
+    {{form.hidden_tag()}}
+    <p>
+        1. {{ form.type.label }}: {{ form.type() }}<br>
+        2. {{ form.model.label }}: {{ form.model() }}<br>
+        3. {{ form.cause.label }}: {{ form.cause() }}<br>
+        4. {{ form.detection_department.label }}: {{ form.detection_department() }}<br>
+    </p>
+{% endblock %}
