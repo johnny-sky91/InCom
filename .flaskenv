@@ -1,1 +1,2 @@
 FLASK_APP=incom.py
+FLASK_ENV=development

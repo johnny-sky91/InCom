@@ -1,19 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Wszystkie zgłoszenia</h1>
-    <hr>
-    {% for registration in all_registrations %}
-        <div><p>Zgłaszający: <b>{{ registration.user_id }}</b><br>
-                ID zgłoszenia: <b>{{ registration.id }}</b><br>
-                Numer zlecenia: <b>{{ registration.order_number }}</b><br>
-                Obszar wykrycia: <b>{{ registration.detection_area }}</b><br>
-                Rodzaj: <b>{{ registration.product_type }}</b><br>
-                Model: <b>{{ registration.model }}</b><br>
-                Przyczyna: <b>{{ registration.cause }}</b><br>
-                Opis: <b>{{ registration.description }}</b>
-            </p></div>
-        <hr>
-    {% endfor %}
+<style>
+table, th, td {
+  border:1px solid black;
+}
+</style>
+<table id="data" class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID zgłoszenia</th>
+        <th>Numer zlecenia</th>
+        <th>Numer zlecenia</th>
+        <th>Numer zlecenia</th>
+        <th>Numer zlecenia</th>
+        <th>Numer zlecenia</th>
 
+    </tr>
+    </thead>
+    <tbody>
+    {% for registration in all_registrations %}
+    <tr>
+        <td>{{ registration.id }}</td>
+        <td>{{ registration.order_number }}</td>
+        <td>{{ registration.order_number }}</td>
+        <td>{{ registration.order_number }}</td>
+        <td>{{ registration.order_number }}</td>
+        <td>{{ registration.order_number }}</td>
+
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
