@@ -38,10 +38,9 @@ class NewRegistrationForm(FlaskForm):
 
     # TODO walidacja tylko kombinacja 5 cyfr
     order_number = StringField('Numer zlecenia', validators=[DataRequired()])
-    type = SelectField('Rodzaj', choices=types, validators=[DataRequired()])
+    product_type = SelectField('Rodzaj', choices=types, validators=[DataRequired()])
     model = SelectField('Model', choices=models, validators=[DataRequired()])
     cause = SelectField('Przyczyna', choices=causes, validators=[DataRequired()])
     detection_area = SelectField('Obszar wykrycia', choices=areas, validators=[DataRequired()])
-    # TODO ograniczyć rozmiar xd
     description = TextAreaField('Opis', validators=[DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Zapisz RW')

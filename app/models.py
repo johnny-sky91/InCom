@@ -21,16 +21,21 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 
-class Post(db.Model):
+class InCom(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
+    user_id = db.Column(db.Integer())
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    order_number = db.Column(db.String(140))
+    product_type = db.Column(db.String(140))
+    model = db.Column(db.String(140))
+    cause = db.Column(db.String(140))
+    detection_area = db.Column(db.String(140))
+    description = db.Column(db.String(140))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return f'<RW: {self.username},{self.product_type}'
 
-
+# TODO na co to było?
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))

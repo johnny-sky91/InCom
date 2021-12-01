@@ -1,9 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Dział: {{ current_user.username }}</h1>
+    <h1>Wszystkie zgłoszenia</h1>
     <hr>
-    {% for post in posts %}
-    <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
+    {% for zgloszenie in all_registrations %}
+        <div><p>Zgłaszający: <b>{{ zgloszenie.user_id }}</b><br>
+                ID zgłoszenia: <b>{{ zgloszenie.id }}</b><br>
+                Numer zlecenia: <b>{{ zgloszenie.order_number }}</b><br>
+                Obszar wykrycia: <b>{{ zgloszenie.detection_area }}</b><br>
+                Rodzaj: <b>{{ zgloszenie.product_type }}</b><br>
+                Model: <b>{{ zgloszenie.model }}</b><br>
+                Przyczyna: <b>{{ zgloszenie.cause }}</b><br>
+                Opis: <b>{{ zgloszenie.description }}</b>
+            </p></div>
+        <hr>
     {% endfor %}
+
 {% endblock %}
