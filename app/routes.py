@@ -59,8 +59,8 @@ def register():
 def user(username):
     # TODO ładne błędy dodać xd
     user = User.query.filter_by(username=username).first_or_404()
-    zgloszenia = InCom.query.filter_by(user_id=current_user.id)
-    return render_template('user.html', user=user, title='Zgłoszone RW', zgloszenia=zgloszenia)
+    user_registrations = InCom.query.filter_by(user_id=current_user.id)
+    return render_template('user.html', user=user, title='Zgłoszone RW', user_registrations=user_registrations)
 
 
 @app.route('/new_registration', methods=['GET', 'POST'])
