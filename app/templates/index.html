@@ -6,19 +6,21 @@
     <thead>
       <tr>
         <th>ID zgłoszenia</th>
+        <th>Zgłaszający</th>
         <th>Data zgłoszenia</th>
         <th>Numer zlecenia</th>
         <th>Obszar wykrycia</th>
         <th>Rodzaj</th>
         <th>Model</th>
-          <th>Przyczyna</th>
-          <th>Opis</th>
+        <th>Przyczyna</th>
+        <th>Opis</th>
       </tr>
     </thead>
     <tbody>
       {% for registration in all_registrations %}
         <tr>
           <td>{{ registration.id }}</td>
+          <td>{{ registration.user_id }}</td>
           <td>{{ moment(registration.timestamp).format('DD/MM/YY') }}</td>
           <td>{{ registration.order_number }}</td>
           <td>{{ registration.detection_area }}</td>

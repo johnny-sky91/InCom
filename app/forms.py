@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, Regexp
 from app.models import User
 
 
@@ -36,11 +36,12 @@ class NewRegistrationForm(FlaskForm):
     causes = ['Porysowanie', 'Wada materiału']
     areas = ['Piła', 'Laser 3D', 'Galanteria', 'Spawalnia']
 
-    # TODO walidacja tylko kombinacja 5 cyfr
-    order_number = StringField('Numer zlecenia', validators=[DataRequired()])
+    order_number = StringField('Numer zlecenia', validators=[Regexp(r'\b\d{5}\b',
+                                                                    message='Błędny nr zlecenia (tylko 5 cyfr)')])
     product_type = SelectField('Rodzaj', choices=types, validators=[DataRequired()])
     model = SelectField('Model', choices=models, validators=[DataRequired()])
     cause = SelectField('Przyczyna', choices=causes, validators=[DataRequired()])
     detection_area = SelectField('Obszar wykrycia', choices=areas, validators=[DataRequired()])
-    description = TextAreaField('Opis', validators=[DataRequired(), Length(min=1, max=140)])
+    description = TextAreaField('Opis', validators=[DataRequired(message='Opis nie może być pusty'), Length(min=1, max=140)])
     submit = SubmitField('Zapisz RW')
+

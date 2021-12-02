@@ -78,6 +78,6 @@ def new_registration():
         db.session.add(incom)
         db.session.commit()
         flash('Przyjęto zgłosznie RW')
-        return redirect(url_for('index'))
+        return redirect(url_for('user', username=current_user.username))
 
     return render_template('new_registration.html', title='Nowe RW', form=form)

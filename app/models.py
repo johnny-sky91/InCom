@@ -33,7 +33,9 @@ class InCom(db.Model):
     description = db.Column(db.String(140))
 
     def __repr__(self):
-        return f'<RW: {self.username},{self.product_type}'
+        return f'RW: {self.id},{self.user_id},{self.timestamp},{self.order_number},{self.product_type},{self.model}, ' \
+               f'{self.cause}, {self.detection_area}, {self.description}'
+
 
 # TODO na co to było?
 @login.user_loader

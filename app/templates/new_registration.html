@@ -4,13 +4,19 @@
     <form action="" method="post" novalidate>
     {{form.hidden_tag()}}
     <p style="font-size:18px">
-        1. {{ form.order_number.label }}: <br>{{ form.order_number() }}<br><br>
+        1. {{ form.order_number.label }}: <br>{{ form.order_number() }}<br>
+        {% for error in form.order_number.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}<br>
         2. {{ form.detection_area.label }}: <br>{{ form.detection_area() }}<br><br>
         3. {{ form.product_type.label }}: <br>{{ form.product_type() }}<br><br>
         4. {{ form.model.label }}: <br>{{ form.model() }}<br><br>
         5. {{ form.cause.label }}: <br>{{ form.cause() }}<br><br>
         6. {{ form.description.label }}: <br>
-        {{ form.description(cols=32, rows=5) }}<br><br>
+        {{ form.description(cols=32, rows=5) }}<br>
+        {% for error in form.description.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}<br>
         {{ form.submit() }} <br>
     </p>
     </form>
