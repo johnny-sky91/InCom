@@ -1,17 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Zgłoszenia działu: {{ current_user.username }}</h1>
-    <hr>
-    {% for registration in user_registrations %}
-        <div><p>ID zgłoszenia: <b>{{ registration.id }}</b><br>
-                Numer zlecenia: <b>{{ registration.order_number }}</b><br>
-                Obszar wykrycia: <b>{{ registration.detection_area }}</b><br>
-                Rodzaj: <b>{{ registration.product_type }}</b><br>
-                Model: <b>{{ registration.model }}</b><br>
-                Przyczyna: <b>{{ registration.cause }}</b><br>
-                Opis: <b>{{ registration.description }}</b>
-            </p></div>
-        <hr>
-    {% endfor %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID zgłoszenia</th>
+        <th>Data zgłoszenia</th>
+        <th>Numer zlecenia</th>
+        <th>Obszar wykrycia</th>
+        <th>Rodzaj</th>
+        <th>Model</th>
+        <th>Przyczyna</th>
+        <th>Opis</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for registration in user_registrations %}
+        <tr>
+          <td>{{ registration.id }}</td>
+          <td>{{ moment(registration.timestamp).format('DD/MM/YY') }}</td>
+          <td>{{ registration.order_number }}</td>
+          <td>{{ registration.detection_area }}</td>
+          <td>{{ registration.product_type }}</td>
+          <td>{{ registration.model }}</td>
+          <td>{{ registration.cause }}</td>
+          <td>{{ registration.description }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
