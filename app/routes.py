@@ -11,7 +11,7 @@ from werkzeug.urls import url_parse
 @app.route('/index')
 @login_required
 def index():
-    all_registrations = InCom.query.all()
+    all_registrations = InCom.query.order_by(InCom.id.desc()).all()
     return render_template("index.html", title='Wszystkie RW', all_registrations=all_registrations)
 
 
@@ -23,7 +23,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Nieprawidłowa nazwa użytkownika lub hasło')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
@@ -49,7 +49,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash('Zarejestrowaleś się!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Zarejestruj się', form=form)
 
@@ -57,9 +57,8 @@ def register():
 @app.route('/user/<username>')
 @login_required
 def user(username):
-    # TODO ładne błędy dodać xd
     user = User.query.filter_by(username=username).first_or_404()
-    user_registrations = InCom.query.filter_by(user_id=current_user.id)
+    user_registrations = InCom.query.filter_by(user_id=current_user.id).order_by(InCom.id.desc()).all()
     return render_template('user.html', user=user, title='Zgłoszone RW', user_registrations=user_registrations)
 
 
