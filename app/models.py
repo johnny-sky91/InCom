@@ -23,7 +23,7 @@ class User(UserMixin, db.Model):
 
 class InCom(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer())
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     order_number = db.Column(db.String(140))
     product_type = db.Column(db.String(140))

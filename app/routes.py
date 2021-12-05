@@ -12,6 +12,10 @@ from werkzeug.urls import url_parse
 @login_required
 def index():
     all_registrations = InCom.query.order_by(InCom.id.desc()).all()
+    for registration in all_registrations:
+        # TODO dodać link do zlecenia, otworzy pdf z systemu
+        registration.order_link = f'Link {registration.order_number}'
+        registration.user_name = User.query.filter_by(id=registration.user_id).first().username
     return render_template("index.html", title='Wszystkie RW', all_registrations=all_registrations)
 
 
@@ -59,6 +63,9 @@ def register():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     user_registrations = InCom.query.filter_by(user_id=current_user.id).order_by(InCom.id.desc()).all()
+    for registration in user_registrations:
+        # TODO dodać link do zlecenia, otworzy pdf z systemu
+        registration.order_link = f'Link {registration.order_number}'
     return render_template('user.html', user=user, title='Zgłoszone RW', user_registrations=user_registrations)
 
 

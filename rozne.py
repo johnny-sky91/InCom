@@ -1,10 +1,11 @@
-from app.models import InCom
+from app.models import InCom, User
 from app import app, db
 
 
 def dupa():
-    cyce = InCom.query(id).all
-    return cyce
+    zgloszenia = InCom.query.order_by(InCom.id.desc()).all()
+    for zgloszenie in zgloszenia:
+        print(User.query.filter_by(id=zgloszenie.user_id).first().username)
 
 
 print(dupa())
