@@ -1,17 +1,4 @@
 venv
 *.xml
 *.iml
-app/__pycache__/__init__.cpython-39.pyc
-app/__pycache__/__init__.cpython-39.pyc
-app/__pycache__/forms.cpython-39.pyc
-app/__pycache__/models.cpython-39.pyc
-app/__pycache__/routes.cpython-39.pyc
-__pycache__/incom.cpython-39.pyc
-__pycache__/config.cpython-39.pyc
-app/__pycache__/__init__.cpython-39.pyc
-app/__pycache__/__init__.cpython-39.pyc
-app/__pycache__/__init__.cpython-39.pyc
-app/__pycache__/forms.cpython-39.pyc
-app/__pycache__/models.cpython-39.pyc
-app/__pycache__/routes.cpython-39.pyc
 *.pyc

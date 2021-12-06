@@ -98,16 +98,11 @@ def profile():
 
 
 # TODO funkcja do zmiany statusu zlecenia
-
-def wf_change_status(reg_id):
-    to_change = InCom.query.filter_by(id=reg_id).first()
-    to_change.registration_status = 'ZAKOŃCZONE'
-    db.session.commit()
-
-
 @app.route('/change_status/<reg_id>', methods=['GET', 'POST'])
 @login_required
 def change_status(reg_id):
-    wf_change_status(reg_id)
+    to_change = InCom.query.filter_by(id=reg_id).first()
+    to_change.registration_status = 'ZAKOŃCZONE'
+    db.session.commit()
     flash(f'Zmieniono status Zgłoszenia ID={reg_id}')
     return redirect(url_for('user_registrations', username=current_user.username))
