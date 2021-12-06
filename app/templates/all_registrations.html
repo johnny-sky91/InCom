@@ -14,6 +14,7 @@
         <th>Model</th>
         <th>Przyczyna</th>
         <th>Opis</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
@@ -22,12 +23,13 @@
           <td>{{ registration.id }}</td>
           <td>{{ registration.user_name }}</td>
           <td>{{ moment(registration.timestamp).format('DD/MM/YY') }}</td>
-          <td><a href="https://www.w3schools.com">{{ registration.order_link }}</a></td>
+          <td><a href="{{ registration.order_link }}">{{ registration.order_number }}</a></td>
           <td>{{ registration.detection_area }}</td>
           <td>{{ registration.product_type }}</td>
           <td>{{ registration.model }}</td>
-            <td>{{ registration.cause }}</td>
+          <td>{{ registration.cause }}</td>
           <td>{{ registration.description }}</td>
+          <td>{{ registration.registration_status }}</td>
         </tr>
       {% endfor %}
     </tbody>

@@ -31,10 +31,26 @@ class InCom(db.Model):
     cause = db.Column(db.String(140))
     detection_area = db.Column(db.String(140))
     description = db.Column(db.String(140))
+    registration_status = db.Column(db.String(140), default='OTWARTE')
 
     def __repr__(self):
         return f'RW: {self.id},{self.user_id},{self.timestamp},{self.order_number},{self.product_type},{self.model}, ' \
-               f'{self.cause}, {self.detection_area}, {self.description}'
+               f'{self.cause}, {self.detection_area}, {self.description}, {self.registration_status}'
+
+
+class Models(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_model = db.Column(db.String(140))
+
+
+class Types(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_type = db.Column(db.String(140))
+
+
+class Causes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cause_type = db.Column(db.String(140))
 
 
 # TODO na co to było?
