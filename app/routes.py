@@ -1,10 +1,11 @@
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, NewRegistrationForm
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, make_response
 from flask_login import current_user, login_user
 from app.models import User, InCom
 from flask_login import login_required, logout_user
 from werkzeug.urls import url_parse
+import pdfkit
 
 
 @app.route('/')
@@ -106,3 +107,16 @@ def change_status(reg_id):
     db.session.commit()
     flash(f'Zmieniono status Zgłoszenia ID={reg_id}')
     return redirect(url_for('user_registrations', username=current_user.username))
+
+
+# TODO dopracować tworzenie pdf!!!
+@app.route("/get_report")
+@login_required
+def get_report():
+    name = "Duppa Testowa"
+    html = render_template("report_pdf.html", name=name)
+    pdf = pdfkit.from_string(html, False)
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=output.pdf"
+    return response

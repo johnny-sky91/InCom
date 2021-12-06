@@ -16,7 +16,7 @@ def zmiana(id_do_zmiany):
     # do_zmiany.registration_status = 'ZAKOŃCZONE'
     # db.session.commit()
 
-zmiana(15)
+#zmiana(15)
 
 
 def dodaj_roznie(do_dodania):
