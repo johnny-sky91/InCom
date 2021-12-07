@@ -1,12 +1,15 @@
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, NewRegistrationForm
-from flask import render_template, flash, redirect, url_for, request, send_file, send_from_directory
+from flask import render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import current_user, login_user
 from app.models import User, InCom
 from flask_login import login_required, logout_user
 from werkzeug.urls import url_parse
 from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 import os
+from datetime import datetime, timezone
 
 
 @app.route('/')
@@ -92,11 +95,11 @@ def new_registration():
     return render_template('new_registration.html', title='Nowe RW', form=form)
 
 
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
-def profile():
-    # TODO wypełnić radosną tfurczosciom
-    return render_template('profile.html', title='Profil')
+def profile(username):
+    user = username
+    return render_template('profile.html', title='Profil', user=user)
 
 
 @app.route('/change_status/<reg_id>', methods=['GET', 'POST'])
@@ -109,11 +112,29 @@ def change_status(reg_id):
     return redirect(url_for('user_registrations', username=current_user.username))
 
 
-@app.route('/get_report')
-def get_report():
-    report = canvas.Canvas("reports/kolejne.pdf")
-    report.drawString(50, 800, "**DUUUUPA**")
+@app.route('/get_report/<id_to_report>')
+def get_report(id_to_report):
+    report_query = InCom.query.filter_by(id=id_to_report).first()
+    data_report = {
+        'ID ZGŁOSZENIA': id_to_report,
+        'NUMER ZLECENIA': report_query.order_number,
+        'DATA ZGŁOSZENIA':
+            report_query.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y %H:%M:%S'),
+        'ZGŁASZAJĄCY': report_query.user_id,
+        'OBSZAR WYKRYCIA': report_query.detection_area,
+        'RODZAJ': report_query.product_type,
+        'MODEL': report_query.model,
+        'PRZYCZYNA': report_query.cause,
+        'OPIS': report_query.description,
+
+    }
+    pdfmetrics.registerFont(TTFont('Arial', 'arial.ttf'))
+    report = canvas.Canvas(f"reports/RW_{id_to_report}.pdf")
+    report.setFont('Arial', 12)
+    report.drawString(150, 800, f'REKLAMACJA WEWNĘTRZNA')
+    for i, key in enumerate(data_report):
+        report.drawString(50, 780 - (i * 20), f'{key}: {data_report[key]}')
     report.save()
     workingdir = os.path.abspath(os.getcwd())
     filepath = workingdir + '/reports/'
-    return send_from_directory(filepath, 'kolejne.pdf')
+    return send_from_directory(filepath, f'RW_{id_to_report}.pdf')

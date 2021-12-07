@@ -15,7 +15,7 @@
           {% else %}
           <a href="{{ url_for('user_registrations', username=current_user.username) }}">Zgłoszone RW</a>
           <a href="{{ url_for('new_registration')}}">Nowe RW</a>
-          <a href="{{ url_for('profile')}}">Profil</a>
+          <a href="{{ url_for('profile', username=current_user.username) }}">Profil</a>
           <a href="{{ url_for('logout') }}">Wyloguj się</a>
           {% endif %}
         </div>
