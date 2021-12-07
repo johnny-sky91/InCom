@@ -1,11 +1,12 @@
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, NewRegistrationForm
-from flask import render_template, flash, redirect, url_for, request, make_response
+from flask import render_template, flash, redirect, url_for, request, send_file, send_from_directory
 from flask_login import current_user, login_user
 from app.models import User, InCom
 from flask_login import login_required, logout_user
 from werkzeug.urls import url_parse
-import pdfkit
+from reportlab.pdfgen import canvas
+import os
 
 
 @app.route('/')
@@ -98,7 +99,6 @@ def profile():
     return render_template('profile.html', title='Profil')
 
 
-# TODO funkcja do zmiany statusu zlecenia
 @app.route('/change_status/<reg_id>', methods=['GET', 'POST'])
 @login_required
 def change_status(reg_id):
@@ -109,14 +109,11 @@ def change_status(reg_id):
     return redirect(url_for('user_registrations', username=current_user.username))
 
 
-# TODO dopracować tworzenie pdf!!!
-@app.route("/get_report")
-@login_required
+@app.route('/get_report')
 def get_report():
-    name = "Duppa Testowa"
-    html = render_template("report_pdf.html", name=name)
-    pdf = pdfkit.from_string(html, False)
-    response = make_response(pdf)
-    response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "inline; filename=output.pdf"
-    return response
+    report = canvas.Canvas("reports/kolejne.pdf")
+    report.drawString(50, 800, "**DUUUUPA**")
+    report.save()
+    workingdir = os.path.abspath(os.getcwd())
+    filepath = workingdir + '/reports/'
+    return send_from_directory(filepath, 'kolejne.pdf')
