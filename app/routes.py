@@ -9,7 +9,7 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import os
-from datetime import datetime, timezone
+from datetime import timezone
 
 
 @app.route('/')
@@ -20,6 +20,8 @@ def all_registrations():
     for registration in all_registrations_query:
         registration.order_link = f'https://zamowienia.konsport.com.pl/pl/zamowienia/pdf/' \
                                   f'{registration.order_number}/zamowienie/false'
+        registration.local_timestamp = registration.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime(
+            '%d/%m/%Y')
         registration.user_name = User.query.filter_by(id=registration.user_id).first().username
     return render_template("all_registrations.html", title='Wszystkie RW', all_registrations=all_registrations_query)
 
@@ -71,6 +73,8 @@ def user_registrations(username):
     for registration in user_registrations_query:
         registration.order_link = f'https://zamowienia.konsport.com.pl/pl/zamowienia/pdf/' \
                                   f'{registration.order_number}/zamowienie/false'
+        registration.timestamp = registration.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime(
+            '%d/%m/%Y')
     return render_template('user_registrations.html', user=user, title='Zgłoszone RW',
                            user_registrations=user_registrations_query)
 

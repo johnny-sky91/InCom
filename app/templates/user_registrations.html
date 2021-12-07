@@ -19,7 +19,7 @@
       {% for registration in user_registrations %}
         <tr>
           <td>{{ registration.id }}</td>
-          <td>{{ moment(registration.timestamp).format('DD/MM/YY') }}</td>
+          <td>{{ registration.timestamp }}</td>
           <td><a href="{{ registration.order_link }}">{{ registration.order_number }}</a></td>
           <td>{{ registration.detection_area }}</td>
           <td>{{ registration.product_type }}</td>
