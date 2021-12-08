@@ -1,4 +1,4 @@
-from app.models import InCom, User, Types, Models, Causes
+from app.models import InCom, User, Types, Models, Causes,DetectionAreas
 from app import app, db
 
 
@@ -18,6 +18,10 @@ def zmiana(id_do_zmiany):
 
 #zmiana(15)
 
+types_query = Types.query.all()
+for x in types_query:
+    print(x.product_type)
+#types = [item for t in types_query for item in t]
 
 def dodaj_roznie(do_dodania):
     incom = Causes(cause_type=do_dodania)

@@ -53,7 +53,12 @@ class Causes(db.Model):
     cause_type = db.Column(db.String(140))
 
 
-# TODO na co to było?
+class DetectionAreas(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    detection_area = db.Column(db.String(140))
+
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))

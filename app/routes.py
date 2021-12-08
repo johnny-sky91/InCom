@@ -1,8 +1,8 @@
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, NewRegistrationForm
+from app.forms import LoginForm, RegistrationForm, NewRegistrationForm, NewAreaForm
 from flask import render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import current_user, login_user
-from app.models import User, InCom
+from app.models import User, InCom, DetectionAreas
 from flask_login import login_required, logout_user
 from werkzeug.urls import url_parse
 from reportlab.pdfgen import canvas
@@ -75,7 +75,7 @@ def user_registrations(username):
                                   f'{registration.order_number}/zamowienie/false'
         registration.timestamp = registration.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime(
             '%d/%m/%Y')
-    return render_template('user_registrations.html', user=user, title='Zgłoszone RW',
+    return render_template('user_registrations.html', user=user, title=f'Zgłoszone RW - {username}',
                            user_registrations=user_registrations_query)
 
 
@@ -84,26 +84,21 @@ def user_registrations(username):
 def new_registration():
     form = NewRegistrationForm()
     if form.validate_on_submit():
-        incom = InCom(user_id=current_user.id,
-                      order_number=form.order_number.data,
-                      product_type=form.product_type.data,
-                      model=form.model.data,
-                      cause=form.cause.data,
-                      detection_area=form.detection_area.data,
-                      description=form.description.data, )
+        incom = InCom(
+            user_id=current_user.id,
+            order_number=form.order_number.data,
+            product_type=form.product_type.data,
+            model=form.model.data,
+            cause=form.cause.data,
+            detection_area=form.detection_area.data,
+            description=form.description.data
+        )
         db.session.add(incom)
         db.session.commit()
         flash('Przyjęto zgłosznie RW')
         return redirect(url_for('user_registrations', username=current_user.username))
 
-    return render_template('new_registration.html', title='Nowe RW', form=form)
-
-
-@app.route('/profile/<username>', methods=['GET', 'POST'])
-@login_required
-def profile(username):
-    user = username
-    return render_template('profile.html', title='Profil', user=user)
+    return render_template('new_registration.html', title=f'Nowe RW - {current_user.username}', form=form)
 
 
 @app.route('/change_status/<reg_id>', methods=['GET', 'POST'])
@@ -130,10 +125,9 @@ def get_report(id_to_report):
         'MODEL': report_query.model,
         'PRZYCZYNA': report_query.cause,
         'OPIS': report_query.description,
-
     }
     pdfmetrics.registerFont(TTFont('Arial', 'arial.ttf'))
-    report = canvas.Canvas(f"reports/RW_{id_to_report}.pdf")
+    report = canvas.Canvas('reports/RW.pdf')
     report.setFont('Arial', 12)
     report.drawString(150, 800, f'REKLAMACJA WEWNĘTRZNA')
     for i, key in enumerate(data_report):
@@ -141,4 +135,26 @@ def get_report(id_to_report):
     report.save()
     workingdir = os.path.abspath(os.getcwd())
     filepath = workingdir + '/reports/'
-    return send_from_directory(filepath, f'RW_{id_to_report}.pdf')
+    return send_from_directory(filepath, f'RW.pdf')
+
+
+@app.route('/profile/<username>', methods=['GET', 'POST'])
+@login_required
+def profile(username):
+    return render_template('profile.html', title=f'Profil - {username}')
+
+# TODO username tak czy nie?
+@app.route('/add_new_area/<username>', methods=['GET', 'POST'])
+@login_required
+def add_new_area(username):
+    form = NewAreaForm()
+    if form.validate_on_submit():
+        new_area = DetectionAreas(
+            user_id=current_user.id,
+            detection_area=f'{form.new_area.data}'
+        )
+        db.session.add(new_area)
+        db.session.commit()
+        flash('Dodano nowy obszar dla działu')
+        return redirect(url_for('profile', username=current_user.username))
+    return render_template('new_area.html', title='Dodaj nowy obszar', form=form)

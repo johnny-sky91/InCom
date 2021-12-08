@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, Regexp
-from app.models import User, Types, Models, Causes
+from app.models import User, Types, Models, Causes, DetectionAreas
+from flask_login import current_user
 
 
 class LoginForm(FlaskForm):
@@ -29,9 +30,18 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Użyj innego adresu')
 
 
+# TODO form na dodanie obszaru dla kontrenego działu
+class NewAreaForm(FlaskForm):
+    new_area = StringField('Podaj nazwę nowego obszaru', validators=[DataRequired()])
+    submit = SubmitField('Dodaj nowy obszar')
+
+
 class NewRegistrationForm(FlaskForm):
-    # TODO docelowo pobrane z DB
-    areas = ['Piła', 'Laser 3D', 'Galanteria', 'Spawalnia']
+    # TODO problem z obszarem wykrycia - nie odświeża się
+    #areas = ['Piła', 'Laser 3D', 'Galanteria', 'Spawalnia']
+
+    areas_query = DetectionAreas.query.with_entities(DetectionAreas.detection_area)
+    areas = [item for t in areas_query for item in t]
 
     types_query = Types.query.with_entities(Types.product_type)
     types = [item for t in types_query for item in t]
