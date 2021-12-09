@@ -37,6 +37,20 @@ class InCom(db.Model):
         return f'RW: {self.id},{self.user_id},{self.timestamp},{self.order_number},{self.product_type},{self.model}, ' \
                f'{self.cause}, {self.detection_area}, {self.description}, {self.registration_status}'
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'timestamp': self.timestamp,
+            'order_number': self.order_number,
+            'detection_area': self.detection_area,
+            'product_type': self.product_type,
+            'model': self.model,
+            'cause': self.cause,
+            'description': self.description,
+            'registration_status': self.registration_status
+        }
+
 
 class Models(db.Model):
     id = db.Column(db.Integer, primary_key=True)

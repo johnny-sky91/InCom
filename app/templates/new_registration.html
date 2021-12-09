@@ -8,7 +8,7 @@
         {% for error in form.order_number.errors %}
         <span style="color: red;">{{ error }}</span>
         {% endfor %}<br>
-        2. {{ form.detection_area.label }}: <br>{{ form.detection_area() }}<br><br>
+        2. {{ form.detection_area.label }}: <br> {{ form.detection_area() }}<br><br>
         3. {{ form.product_type.label }}: <br>{{ form.product_type() }}<br><br>
         4. {{ form.model.label }}: <br>{{ form.model() }}<br><br>
         5. {{ form.cause.label }}: <br>{{ form.cause() }}<br><br>

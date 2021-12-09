@@ -12,7 +12,7 @@ import os
 from datetime import timezone
 
 
-@app.route('/')
+#@app.route('/')
 @app.route('/all_registrations')
 @login_required
 def all_registrations():
@@ -83,6 +83,11 @@ def user_registrations(username):
 @login_required
 def new_registration():
     form = NewRegistrationForm()
+
+    areas_query = DetectionAreas.query.with_entities(DetectionAreas.detection_area).filter_by(user_id=current_user.id)
+    areas = [item for t in areas_query for item in t]
+    form.detection_area.choices = areas
+
     if form.validate_on_submit():
         incom = InCom(
             user_id=current_user.id,
@@ -143,10 +148,10 @@ def get_report(id_to_report):
 def profile(username):
     return render_template('profile.html', title=f'Profil - {username}')
 
-# TODO username tak czy nie?
-@app.route('/add_new_area/<username>', methods=['GET', 'POST'])
+
+@app.route('/add_new_area', methods=['GET', 'POST'])
 @login_required
-def add_new_area(username):
+def add_new_area():
     form = NewAreaForm()
     if form.validate_on_submit():
         new_area = DetectionAreas(
@@ -158,3 +163,54 @@ def add_new_area(username):
         flash('Dodano nowy obszar dla działu')
         return redirect(url_for('profile', username=current_user.username))
     return render_template('new_area.html', title='Dodaj nowy obszar', form=form)
+
+
+# TODO wdrażanie nowej tabeli
+
+@app.route('/')
+def index():
+    return render_template('nowa_tablica.html', title='Nowa tabela')
+
+
+@app.route('/api/data')
+def data():
+    query = InCom.query
+    # search filter
+    search = request.args.get('search[value]')
+    if search:
+        query = query.filter(db.or_(
+            InCom.id.like(f'%{search}%'),
+            InCom.order_number.like(f'%{search}%')
+        ))
+    total_filtered = query.count()
+
+    # sorting
+    order = []
+    i = 0
+    while True:
+        col_index = request.args.get(f'order[{i}][column]')
+        if col_index is None:
+            break
+        col_name = request.args.get(f'columns[{col_index}][data]')
+        if col_name not in ['id', 'user_id', 'order_number']:
+            col_name = 'id'
+        descending = request.args.get(f'order[{i}][dir]') == 'desc'
+        col = getattr(InCom, col_name)
+        if descending:
+            col = col.desc()
+        order.append(col)
+        i += 1
+    if order:
+        query = query.order_by(*order)
+
+    # pagination
+    start = request.args.get('start', type=int)
+    length = request.args.get('length', type=int)
+    query = query.offset(start).limit(length)
+
+    # response
+    return {
+        'data': [user.to_dict() for user in query],
+        'recordsFiltered': total_filtered,
+        'recordsTotal': InCom.query.count(),
+    }

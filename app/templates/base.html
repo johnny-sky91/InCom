@@ -17,6 +17,7 @@
           <a href="{{ url_for('new_registration')}}">Nowe RW</a>
           <a href="{{ url_for('profile', username=current_user.username) }}">Profil</a>
           <a href="{{ url_for('logout') }}">Wyloguj się</a>
+          <a href="{{ url_for('index') }}">Nowa tabela</a>
           {% endif %}
         </div>
         <hr>

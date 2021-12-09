@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Selec
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, Regexp
 from app.models import User, Types, Models, Causes, DetectionAreas
 from flask_login import current_user
-
+import random
 
 class LoginForm(FlaskForm):
     username = StringField('Użytkownik', validators=[DataRequired()])
@@ -37,12 +37,6 @@ class NewAreaForm(FlaskForm):
 
 
 class NewRegistrationForm(FlaskForm):
-    # TODO problem z obszarem wykrycia - nie odświeża się
-    #areas = ['Piła', 'Laser 3D', 'Galanteria', 'Spawalnia']
-
-    areas_query = DetectionAreas.query.with_entities(DetectionAreas.detection_area)
-    areas = [item for t in areas_query for item in t]
-
     types_query = Types.query.with_entities(Types.product_type)
     types = [item for t in types_query for item in t]
 
@@ -57,7 +51,7 @@ class NewRegistrationForm(FlaskForm):
     product_type = SelectField('Rodzaj', choices=types, validators=[DataRequired()])
     model = SelectField('Model', choices=models, validators=[DataRequired()])
     cause = SelectField('Przyczyna', choices=causes, validators=[DataRequired()])
-    detection_area = SelectField('Obszar wykrycia', choices=areas, validators=[DataRequired()])
+    detection_area = SelectField('Obszar wykrycia', validators=[DataRequired()])
     description = TextAreaField('Opis', validators=[DataRequired(message='Opis nie może być pusty'),
                                                     Length(min=1, max=140)])
     submit = SubmitField('Zapisz RW')

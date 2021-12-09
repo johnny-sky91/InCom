@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID zgłoszenia</th>
+        <th>Zgłaszający</th>
+        <th>Data zgłoszenia</th>
+        <th>Numer zlecenia</th>
+        <th>Obszar wykrycia</th>
+        <th>Rodzaj</th>
+        <th>Model</th>
+        <th>Przyczyna</th>
+        <th>Opis</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        ajax: '/api/data',
+        serverSide: true,
+        columns: [
+          {data: 'id'},
+          {data: 'user_id'},
+          {data: 'timestamp'},
+          {data: 'order_number'},
+          {data: 'detection_area'},
+          {data: 'product_type'},
+          {data: 'model'},
+          {data: 'cause'},
+          {data: 'description'},
+          {data: 'registration_status'},
+        ],
+      });
+    });
+  </script>
+{% endblock %}
