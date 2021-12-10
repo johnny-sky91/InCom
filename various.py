@@ -2,7 +2,26 @@ from app.models import InCom, User, Types, Models, Causes, DetectionAreas
 from app import app, db
 from datetime import timezone
 
-def bezposrednio_baza()
+
+def delete_users():
+    User.query.delete()
+    db.session.commit()
+
+
+def delete_incom():
+    InCom.query.delete()
+    db.session.commit()
+
+
+def delete_areas():
+    DetectionAreas.query.delete()
+    db.session.commit()
+
+
+delete_users()
+
+
+def bezposrednio_baza():
     import sqlite3
     sqlite3.connect('app.db')
     conn = sqlite3.connect('app.db')
@@ -28,6 +47,3 @@ lista_przyczyny = ['USZKODZENIE - POWŁOKA LAKIERNICZA', 'USZKODZENIE - KONSTRUK
                    'WADA - POWŁOKA LAKIERNICZA', 'WADA - POZOSTAŁE', 'BŁĘDY - SPAWANIE', 'BŁĘDY - LASER',
                    'BŁĘDY - PIŁA',
                    'BŁĘDY - GUMOWANIE', 'BŁĘDY - POZOSTAŁE', 'BRAKI']
-
-# for x in lista_przyczyny:
-#     dodaj_roznie(x)
