@@ -1,5 +1,5 @@
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, NewRegistrationForm, NewAreaForm
+from app.forms import LoginForm, RegistrationForm, NewComplaintForm, NewAreaForm
 from flask import render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import current_user, login_user
 from app.models import User, InCom, DetectionAreas
@@ -12,77 +12,69 @@ import os
 from datetime import timezone
 
 
-#@app.route('/')
-@app.route('/all_registrations')
+@app.route('/')
+@app.route('/all_complaints')
+def all_complaints():
+    return render_template('all_complaints.html', title='All complaints')
+
+
+@app.route('/user_complaints/<username>')
 @login_required
-def all_registrations():
-    all_registrations_query = InCom.query.order_by(InCom.id.desc()).all()
-    for registration in all_registrations_query:
-        registration.order_link = f'https://zamowienia.konsport.com.pl/pl/zamowienia/pdf/' \
-                                  f'{registration.order_number}/zamowienie/false'
-        registration.local_timestamp = registration.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime(
+def user_complaints(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    user_complaints_query = InCom.query.filter_by(user_id=current_user.id).order_by(InCom.id.desc()).all()
+    for complaint in user_complaints_query:
+        complaint.order_link = f'https://zamowienia.konsport.com.pl/pl/zamowienia/pdf/' \
+                               f'{complaint.order_number}/zamowienie/false'
+        complaint.timestamp = complaint.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime(
             '%d/%m/%Y')
-        registration.user_name = User.query.filter_by(id=registration.user_id).first().username
-    return render_template("all_registrations.html", title='Wszystkie RW', all_registrations=all_registrations_query)
+    return render_template('user_complaints.html', user=user, title=f'User complaints - {username}',
+                           user_complaints=user_complaints_query)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('all_registrations'))
+        return redirect(url_for('all_complaints'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Nieprawidłowa nazwa użytkownika lub hasło')
+            flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('all_registrations')
+            next_page = url_for('all_complaints')
         return redirect(next_page)
-    return render_template('login.html', title='Zaloguj się', form=form)
+    return render_template('login.html', title='Login', form=form)
 
 
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('all_registrations'))
+    return redirect(url_for('all_complaints'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('all_registrations'))
+        return redirect(url_for('all_complaints'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Zarejestrowaleś się!')
+        flash('You have signed up')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Zarejestruj się', form=form)
+    return render_template('register.html', title='Sign up', form=form)
 
 
-@app.route('/user_registrations/<username>')
+@app.route('/new_complaint', methods=['GET', 'POST'])
 @login_required
-def user_registrations(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    user_registrations_query = InCom.query.filter_by(user_id=current_user.id).order_by(InCom.id.desc()).all()
-    for registration in user_registrations_query:
-        registration.order_link = f'https://zamowienia.konsport.com.pl/pl/zamowienia/pdf/' \
-                                  f'{registration.order_number}/zamowienie/false'
-        registration.timestamp = registration.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime(
-            '%d/%m/%Y')
-    return render_template('user_registrations.html', user=user, title=f'Zgłoszone RW - {username}',
-                           user_registrations=user_registrations_query)
-
-
-@app.route('/new_registration', methods=['GET', 'POST'])
-@login_required
-def new_registration():
-    form = NewRegistrationForm()
+def new_complaint():
+    form = NewComplaintForm()
 
     areas_query = DetectionAreas.query.with_entities(DetectionAreas.detection_area).filter_by(user_id=current_user.id)
     areas = [item for t in areas_query for item in t]
@@ -100,20 +92,20 @@ def new_registration():
         )
         db.session.add(incom)
         db.session.commit()
-        flash('Przyjęto zgłosznie RW')
-        return redirect(url_for('user_registrations', username=current_user.username))
+        flash('New complaint added')
+        return redirect(url_for('user_complaints', username=current_user.username))
 
-    return render_template('new_registration.html', title=f'Nowe RW - {current_user.username}', form=form)
+    return render_template('new_complaint.html', title=f'New complaint - {current_user.username}', form=form)
 
 
 @app.route('/change_status/<reg_id>', methods=['GET', 'POST'])
 @login_required
 def change_status(reg_id):
     to_change = InCom.query.filter_by(id=reg_id).first()
-    to_change.registration_status = 'ZAKOŃCZONE'
+    to_change.complaint_status = 'CLOSED'
     db.session.commit()
-    flash(f'Zmieniono status Zgłoszenia ID={reg_id}')
-    return redirect(url_for('user_registrations', username=current_user.username))
+    flash(f'Complaint ID={reg_id} status changed')
+    return redirect(url_for('user_complaints', username=current_user.username))
 
 
 @app.route('/get_report/<id_to_report>')
@@ -146,7 +138,7 @@ def get_report(id_to_report):
 @app.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
 def profile(username):
-    return render_template('profile.html', title=f'Profil - {username}')
+    return render_template('profile.html', title=f'Profile - {username}')
 
 
 @app.route('/add_new_area', methods=['GET', 'POST'])
@@ -160,26 +152,23 @@ def add_new_area():
         )
         db.session.add(new_area)
         db.session.commit()
-        flash('Dodano nowy obszar dla działu')
+        flash('A new area was added to the department')
         return redirect(url_for('profile', username=current_user.username))
-    return render_template('new_area.html', title='Dodaj nowy obszar', form=form)
+    return render_template('new_area.html', title='Add new area', form=form)
 
 
 # TODO wdrażanie nowej tabeli
-
-@app.route('/')
-def index():
-    return render_template('nowa_tablica.html', title='Nowa tabela')
 
 
 @app.route('/api/data')
 def data():
     query = InCom.query
+
     # search filter
     search = request.args.get('search[value]')
     if search:
         query = query.filter(db.or_(
-            InCom.id.like(f'%{search}%'),
+            InCom.description.like(f'%{search}%'),
             InCom.order_number.like(f'%{search}%')
         ))
     total_filtered = query.count()
@@ -208,9 +197,17 @@ def data():
     length = request.args.get('length', type=int)
     query = query.offset(start).limit(length)
 
+    # TODO wykonać działania na tej liście dictów
+    final_data = [user.to_dict() for user in query]
+    for x in final_data:
+        order_number_link = f'https://zamowienia.konsport.com.pl/pl/zamowienia/pdf/{x["order_number"]}/zamowienie/false'
+        order_number_link = f"<a href={order_number_link}>{x['order_number']}</a>"
+        local_timestamp = x["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
+        user = User.query.filter_by(id=x["user_id"]).first().username
+        x.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user})
     # response
     return {
-        'data': [user.to_dict() for user in query],
+        'data': final_data,
         'recordsFiltered': total_filtered,
         'recordsTotal': InCom.query.count(),
     }

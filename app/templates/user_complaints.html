@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Complaint ID</th>
+        <th>Date</th>
+        <th>Order number</th>
+        <th>Detection area</th>
+        <th>Product type</th>
+        <th>Model</th>
+        <th>Cause</th>
+        <th>Description</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for complaint in user_complaints %}
+        <tr>
+          <td>{{ complaint.id }}</td>
+          <td>{{ complaint.timestamp }}</td>
+          <td><a href="{{ complaint.order_link }}">{{ complaint.order_number }}</a></td>
+          <td>{{ complaint.detection_area }}</td>
+          <td>{{ complaint.product_type }}</td>
+          <td>{{ complaint.model }}</td>
+          <td>{{ complaint.cause }}</td>
+          <td>{{ complaint.description }}</td>
+          <td><a href="{{ url_for('change_status', reg_id=complaint.id) }}">{{ complaint.complaint_status }}</a><br>
+            <a href="{{ url_for('get_report', id_to_report=complaint.id) }}">Report</a>
+          </td>
+
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

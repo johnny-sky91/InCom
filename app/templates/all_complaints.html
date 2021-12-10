@@ -4,15 +4,15 @@
   <table id="data" class="table table-striped">
     <thead>
       <tr>
-        <th>ID zgłoszenia</th>
-        <th>Zgłaszający</th>
-        <th>Data zgłoszenia</th>
-        <th>Numer zlecenia</th>
-        <th>Obszar wykrycia</th>
-        <th>Rodzaj</th>
+        <th>Complaint ID</th>
+        <th>Order number</th>
+        <th>Department</th>
+        <th>Detection area</th>
+        <th>Date</th>
+        <th>Product type</th>
         <th>Model</th>
-        <th>Przyczyna</th>
-        <th>Opis</th>
+        <th>Cause</th>
+        <th>Description</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -29,15 +29,15 @@
         serverSide: true,
         columns: [
           {data: 'id'},
-          {data: 'user_id'},
-          {data: 'timestamp'},
           {data: 'order_number'},
+          {data: 'user_id'},
           {data: 'detection_area'},
+          {data: 'timestamp'},
           {data: 'product_type'},
           {data: 'model'},
           {data: 'cause'},
           {data: 'description'},
-          {data: 'registration_status'},
+          {data: 'complaint_status'},
         ],
       });
     });

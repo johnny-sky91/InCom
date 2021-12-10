@@ -31,11 +31,11 @@ class InCom(db.Model):
     cause = db.Column(db.String(140))
     detection_area = db.Column(db.String(140))
     description = db.Column(db.String(140))
-    registration_status = db.Column(db.String(140), default='OTWARTE')
+    complaint_status = db.Column(db.String(140), default='Active')
 
     def __repr__(self):
         return f'RW: {self.id},{self.user_id},{self.timestamp},{self.order_number},{self.product_type},{self.model}, ' \
-               f'{self.cause}, {self.detection_area}, {self.description}, {self.registration_status}'
+               f'{self.cause}, {self.detection_area}, {self.description}, {self.complaint_status}'
 
     def to_dict(self):
         return {
@@ -48,7 +48,7 @@ class InCom(db.Model):
             'model': self.model,
             'cause': self.cause,
             'description': self.description,
-            'registration_status': self.registration_status
+            'complaint_status': self.complaint_status
         }
 
 

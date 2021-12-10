@@ -1,27 +1,17 @@
-from app.models import InCom, User, Types, Models, Causes,DetectionAreas
+from app.models import InCom, User, Types, Models, Causes, DetectionAreas
 from app import app, db
+from datetime import timezone
 
+def bezposrednio_baza()
+    import sqlite3
+    sqlite3.connect('app.db')
+    conn = sqlite3.connect('app.db')
+    "ALTER TABLE table_name RENAME COLUMN current_name TO new_name;"
 
-def dupa():
-    zgloszenia = Types.query.with_entities(Types.product_type)
-    out = [item for t in zgloszenia for item in t]
-    print(out)
+    sql = "ALTER TABLE in_com RENAME COLUMN registration_status TO complaint_status;"
+    cur = conn.cursor()
+    cur.execute(sql)
 
-
-# dupa()
-
-def zmiana(id_do_zmiany):
-    do_zmiany = InCom.query.filter_by(id=id_do_zmiany).first()
-    print(do_zmiany.registration_status)
-    # do_zmiany.registration_status = 'ZAKOŃCZONE'
-    # db.session.commit()
-
-#zmiana(15)
-
-types_query = Types.query.all()
-for x in types_query:
-    print(x.product_type)
-#types = [item for t in types_query for item in t]
 
 def dodaj_roznie(do_dodania):
     incom = Causes(cause_type=do_dodania)
