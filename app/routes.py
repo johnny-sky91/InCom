@@ -157,6 +157,19 @@ def add_new_area():
     return render_template('new_area.html', title='Add new area', form=form)
 
 
+@app.route('/basic_chart', methods=['GET'])
+def basic_chart():
+    data = [
+        ('06/12/2021', 15),
+        ('07/12/2021', 11),
+        ('08/12/2021', 13),
+        ('09/12/2021', 14),
+        ('10/12/2021', 16),
+    ]
+    data_labels = [row[0] for row in data]
+    data_values = [row[1] for row in data]
+    return render_template('basic_chart.html', title='Basic chart', labels=data_labels, values=data_values)
+
 @app.route('/api/data')
 def data():
     query = InCom.query
