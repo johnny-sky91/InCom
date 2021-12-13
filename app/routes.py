@@ -194,7 +194,6 @@ def data():
     length = request.args.get('length', type=int)
     query = query.offset(start).limit(length)
 
-    # TODO wykonać działania na tej liście dictów
     final_data = [user.to_dict() for user in query]
     for x in final_data:
         order_number_link = f'https://zamowienia.konsport.com.pl/pl/zamowienia/pdf/{x["order_number"]}/zamowienie/false'
