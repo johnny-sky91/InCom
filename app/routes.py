@@ -157,9 +157,6 @@ def add_new_area():
     return render_template('new_area.html', title='Add new area', form=form)
 
 
-# TODO wdrażanie nowej tabeli
-
-
 @app.route('/api/data')
 def data():
     query = InCom.query
