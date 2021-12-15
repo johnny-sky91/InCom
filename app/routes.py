@@ -9,8 +9,8 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import os
-from datetime import timezone
-
+from datetime import timezone, datetime
+from collections import Counter
 
 @app.route('/')
 @app.route('/all_complaints')
@@ -159,15 +159,21 @@ def add_new_area():
 
 @app.route('/basic_chart', methods=['GET'])
 def basic_chart():
-    chart_data = [
-        ('06/12/2021', 15),
-        ('07/12/2021', 11),
-        ('08/12/2021', 13),
-        ('09/12/2021', 14),
-        ('10/12/2021', 16),
-    ]
-    labels = [row[0] for row in chart_data]
-    values = [row[1] for row in chart_data]
+    year = datetime.today().isocalendar()[0]
+    week = datetime.today().isocalendar()[1]
+    all_week = {}
+    for x in range(1, 6):
+        day = datetime.strptime(f"{year}-W{week}-{x}", "%Y-W%W-%w").strftime("%Y-%m-%d")
+        all_week[day] = 0
+    dates_query = InCom.query.with_entities(InCom.timestamp)
+    dates = [item.strftime("%Y-%m-%d") for t in dates_query for item in t]
+    for x in dates:
+        if x not in all_week.keys():
+            dates.remove(x)
+    data = dict(Counter(dates))
+    to_chart = {**all_week, **data}
+    labels = list(to_chart.keys())
+    values = list(to_chart.values())
     return render_template('basic_chart.html', title='Basic chart', labels=labels, values=values)
 
 
