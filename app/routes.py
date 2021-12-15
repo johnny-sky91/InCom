@@ -12,6 +12,7 @@ import os
 from datetime import timezone, datetime
 from collections import Counter
 
+
 @app.route('/')
 @app.route('/all_complaints')
 def all_complaints():
