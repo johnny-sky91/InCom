@@ -170,8 +170,8 @@ def basic_chart():
     for x in dates:
         if x not in all_week.keys():
             dates.remove(x)
-    data = dict(Counter(dates))
-    to_chart = {**all_week, **data}
+    dates_dict = dict(Counter(dates))
+    to_chart = {**all_week, **dates_dict}
     labels = list(to_chart.keys())
     values = list(to_chart.values())
     return render_template('basic_chart.html', title='Basic chart', labels=labels, values=values)
