@@ -2,7 +2,7 @@
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<canvas id="basic_chart" width="0" height="0"></canvas>
+<canvas id="basic_chart" width="300" height="100" aria-label="Hello ARIA World" role="img"></canvas>
 <script>
 const ctx = document.getElementById('basic_chart');
 const myChart = new Chart(ctx, {
@@ -19,24 +19,23 @@ const myChart = new Chart(ctx, {
                 'rgb(75, 192, 192)',
                 'rgb(153, 102, 255)',
             ],
-            borderColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 206, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(153, 102, 255)',
-            ],
-            borderWidth: 1
         }]
     },
     options: {
-        scales: {
-                y: {
-                    beginAtZero: true
+        layout: {
+            padding: {
+                    left: 120,
+                    right: 120
+                      }
+            },
+            scales: {
+                    y: {
+                        beginAtZero: true
+                        }
                     }
                 }
-            }
 });
+
 
 </script>
 {% endblock %}
