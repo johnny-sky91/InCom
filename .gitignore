@@ -3,5 +3,4 @@ venv
 *.iml
 *.pyc
 __pycache__/
-various.py
 logs
