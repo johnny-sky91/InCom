@@ -166,15 +166,19 @@ def basic_chart():
     for x in range(1, 6):
         day = datetime.strptime(f"{year}-W{week}-{x}", "%Y-W%W-%w").strftime("%Y-%m-%d")
         all_week[day] = 0
+
     dates_query = InCom.query.with_entities(InCom.timestamp)
     dates = [item.strftime("%Y-%m-%d") for t in dates_query for item in t]
-    for x in dates:
-        if x not in all_week.keys():
-            dates.remove(x)
+
     dates_dict = dict(Counter(dates))
+
     to_chart = {**all_week, **dates_dict}
-    labels = list(to_chart.keys())
-    values = list(to_chart.values())
+    labels = []
+    values = []
+    for key in to_chart:
+        if key in all_week.keys():
+            labels.append(key)
+            values.append(to_chart[key])
     return render_template('basic_chart.html', title='Basic chart', labels=labels, values=values)
 
 
