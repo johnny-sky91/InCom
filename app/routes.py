@@ -1,6 +1,6 @@
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, NewComplaintForm, NewAreaForm
-from app.models import User, InCom, DetectionAreas
+from app.models import User, InCom, DetectionAreas, Types, Models, Causes
 from flask import render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import current_user, login_user
 from flask_login import login_required, logout_user
@@ -80,6 +80,18 @@ def new_complaint():
     areas_query = DetectionAreas.query.with_entities(DetectionAreas.detection_area).filter_by(user_id=current_user.id)
     areas = [item for t in areas_query for item in t]
     form.detection_area.choices = areas
+
+    types_query = Types.query.with_entities(Types.product_type)
+    types = [item for t in types_query for item in t]
+    form.product_type.choices = types
+
+    models_query = Models.query.with_entities(Models.product_model)
+    models = [item for t in models_query for item in t]
+    form.model.choices = models
+
+    causes_query = Causes.query.with_entities(Causes.cause_type)
+    causes = [item for t in causes_query for item in t]
+    form.cause.choices = causes
 
     if form.validate_on_submit():
         incom = InCom(

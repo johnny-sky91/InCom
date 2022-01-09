@@ -35,21 +35,12 @@ class NewAreaForm(FlaskForm):
     submit = SubmitField('Add new area')
 
 
-class NewComplaintForm(FlaskForm):
-    types_query = Types.query.with_entities(Types.product_type)
-    types = [item for t in types_query for item in t]
-
-    models_query = Models.query.with_entities(Models.product_model)
-    models = [item for t in models_query for item in t]
-
-    causes_query = Causes.query.with_entities(Causes.cause_type)
-    causes = [item for t in causes_query for item in t]
-
+class NewComplaintForm(FlaskForm, ):
     order_number = StringField('Order number', validators=[Regexp(r'\b\d{5}\b',
                                                                   message='Wrong order number (only 5 digits)')])
-    product_type = SelectField('Product type', choices=types, validators=[DataRequired()])
-    model = SelectField('Model', choices=models, validators=[DataRequired()])
-    cause = SelectField('Cause', choices=causes, validators=[DataRequired()])
+    product_type = SelectField('Product type', validators=[DataRequired()])
+    model = SelectField('Model', validators=[DataRequired()])
+    cause = SelectField('Cause', validators=[DataRequired()])
     detection_area = SelectField('Detection area', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired(message='Description cannot be empty'),
                                                            Length(min=1, max=140)])
