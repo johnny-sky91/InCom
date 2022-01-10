@@ -25,8 +25,10 @@ def user_complaints(username):
     user = User.query.filter_by(username=username).first_or_404()
     user_complaints_query = InCom.query.filter_by(user_id=current_user.id).order_by(InCom.id.desc()).all()
     for complaint in user_complaints_query:
-        complaint.order_link = f'https://zamowienia.konsport.com.pl/pl/zamowienia/pdf/' \
-                               f'{complaint.order_number}/zamowienie/false'
+        if os.environ.get('LINK') is None:
+            complaint.order_link = complaint.order_number
+        else:
+            complaint.order_link = os.environ.get('LINK').replace('to_replace', complaint.order_number)
         complaint.timestamp = complaint.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime(
             '%d/%m/%Y')
     return render_template('user_complaints.html', user=user, title=f'User complaints - {username}',
