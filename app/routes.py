@@ -235,8 +235,11 @@ def data():
 
     final_data = [user.to_dict() for user in query]
     for x in final_data:
-        order_number_link = f'https://zamowienia.konsport.com.pl/pl/zamowienia/pdf/{x["order_number"]}/zamowienie/false'
-        order_number_link = f"<a href={order_number_link}>{x['order_number']}</a>"
+        if os.environ.get('LINK') is None:
+            order_number_link = x["order_number"]
+        else:
+            order_number_link = os.environ.get('LINK').replace('to_replace', x["order_number"])
+            order_number_link = f"<a href={order_number_link}>{x['order_number']}</a>"
         local_timestamp = x["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
         user = User.query.filter_by(id=x["user_id"]).first().username
         x.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user})
