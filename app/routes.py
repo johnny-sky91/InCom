@@ -217,7 +217,8 @@ def data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['id', 'user_id', 'order_number']:
+        if col_name not in ['id', 'user_id', 'detection_area', 'timestamp', 'product_type',
+                            'model', 'cause', 'description','complaint_status']:
             col_name = 'id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(InCom, col_name)
