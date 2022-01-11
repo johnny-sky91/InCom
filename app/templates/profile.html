@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a href="{{ url_for('add_new_area', username=current_user.username) }}">Add a new detection area</a>
+<a href="{{ url_for('add_new_area', username=current_user.username) }}">Add a new detection area</a><br>
+<a href="{{ url_for('download_csv') }}">Download csv file</a><br>
 
 {% endblock %}

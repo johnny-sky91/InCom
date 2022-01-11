@@ -10,8 +10,8 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import os
 from datetime import timezone, datetime
-from collections import Counter
-
+import flask_excel as excel
+from collections import Counter, defaultdict
 
 @app.route('/')
 @app.route('/all_complaints')
@@ -218,7 +218,7 @@ def data():
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
         if col_name not in ['id', 'user_id', 'detection_area', 'timestamp', 'product_type',
-                            'model', 'cause', 'description','complaint_status']:
+                            'model', 'cause', 'description', 'complaint_status']:
             col_name = 'id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(InCom, col_name)
@@ -250,3 +250,15 @@ def data():
         'recordsFiltered': total_filtered,
         'recordsTotal': InCom.query.count(),
     }
+
+
+@app.route('/download_csv', methods=['GET'])
+def download_csv():
+    excel.init_excel(app)
+    result = defaultdict(list)
+    for row in InCom.query.all():
+        res = row.__dict__
+        res.pop('_sa_instance_state')
+        for key in res:
+            result[key].append(res[key])
+    return excel.make_response_from_dict(result, file_type='csv', file_name='InCom data.csv')

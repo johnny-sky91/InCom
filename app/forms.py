@@ -35,7 +35,7 @@ class NewAreaForm(FlaskForm):
     submit = SubmitField('Add new area')
 
 
-class NewComplaintForm(FlaskForm, ):
+class NewComplaintForm(FlaskForm):
     order_number = StringField('Order number', validators=[Regexp(r'\b\d{5}\b',
                                                                   message='Wrong order number (only 5 digits)')])
     product_type = SelectField('Product type', validators=[DataRequired()])
