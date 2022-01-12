@@ -8,4 +8,4 @@ create_test_data.py
 app.db
 .flaskenv
 .env
-reports/
+reports/RW.pdf
