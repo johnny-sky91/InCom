@@ -13,6 +13,7 @@ from datetime import timezone, datetime
 import flask_excel as excel
 from collections import Counter, defaultdict
 
+
 @app.route('/')
 @app.route('/all_complaints')
 def all_complaints():
@@ -156,9 +157,9 @@ def profile(username):
     return render_template('profile.html', title=f'Profile - {username}')
 
 
-@app.route('/add_new_area', methods=['GET', 'POST'])
+@app.route('/add_new_area/<username>', methods=['GET', 'POST'])
 @login_required
-def add_new_area():
+def add_new_area(username):
     form = NewAreaForm()
     if form.validate_on_submit():
         new_area = DetectionAreas(
@@ -168,7 +169,7 @@ def add_new_area():
         db.session.add(new_area)
         db.session.commit()
         flash('A new area was added to the department')
-        return redirect(url_for('profile', username=current_user.username))
+        return redirect(url_for('profile', username=username))
     return render_template('new_area.html', title='Add new area', form=form)
 
 
