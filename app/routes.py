@@ -5,9 +5,6 @@ from flask import render_template, flash, redirect, url_for, request, send_from_
 from flask_login import current_user, login_user
 from flask_login import login_required, logout_user
 from werkzeug.urls import url_parse
-from reportlab.pdfgen import canvas
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 import os
 from datetime import timezone, datetime
 import flask_excel as excel
