@@ -126,29 +126,8 @@ def change_status(reg_id):
 
 @app.route('/get_report/<id_to_report>')
 def get_report(id_to_report):
-    report_query = InCom.query.filter_by(id=id_to_report).first()
-    data_report = {
-        'ID ZGŁOSZENIA': id_to_report,
-        'NUMER ZLECENIA': report_query.order_number,
-        'DATA ZGŁOSZENIA':
-            report_query.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y %H:%M:%S'),
-        'ZGŁASZAJĄCY': report_query.user_id,
-        'OBSZAR WYKRYCIA': report_query.detection_area,
-        'RODZAJ': report_query.product_type,
-        'MODEL': report_query.model,
-        'PRZYCZYNA': report_query.cause,
-        'OPIS': report_query.description,
-    }
-    pdfmetrics.registerFont(TTFont('Arial', 'arial.ttf'))
-    report = canvas.Canvas('reports/RW.pdf')
-    report.setFont('Arial', 12)
-    report.drawString(150, 800, f'REKLAMACJA WEWNĘTRZNA')
-    for i, key in enumerate(data_report):
-        report.drawString(50, 780 - (i * 20), f'{key}: {data_report[key]}')
-    report.save()
-    workingdir = os.path.abspath(os.getcwd())
-    filepath = workingdir + '/reports/'
-    return send_from_directory(filepath, f'RW.pdf')
+    report_query = InCom.query.filter_by(id=id_to_report).all()
+    return render_template('report.html', title=f'Report ID:{id_to_report}', report_data=report_query)
 
 
 @app.route('/profile/<username>', methods=['GET', 'POST'])
