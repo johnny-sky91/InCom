@@ -121,9 +121,11 @@ def change_status(reg_id):
     return redirect(url_for('user_complaints', username=current_user.username))
 
 
-@app.route('/get_report/<id_to_report>')
+@app.route('/get_report/<id_to_report>', methods=['GET'])
 def get_report(id_to_report):
     report_query = InCom.query.filter_by(id=id_to_report).all()
+    for row in report_query:
+        row.user_id = User.query.filter_by(id=row.user_id).first().username
     return render_template('report.html', title=f'Report ID:{id_to_report}', report_data=report_query)
 
 
