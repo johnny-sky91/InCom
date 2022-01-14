@@ -1,28 +1,56 @@
 <!DOCTYPE html>
 <html>
-<body>
 {% block content %}
 
+<style>
+table, th, td {
+  border:1px solid black;
+  border-collapse: collapse;
+  text-align: center
+}
+
+</style>
+<body>
 
 {% for data in report_data %}
-    <h1> Internal complaint report ID {{ data.id }} </h1>
-    <p>Order number: {{ data.order_number }}</p>
-    <p>Notifying department: {{ data.user_id }}</p>
-    <p>Detection area: {{ data.detection_area }}</p>
-    <p>Date: {{ data.timestamp }}</p>
-    <p>Product type: {{ data.product_type }}</p>
-    <p>Model: {{ data.model }}</p>
-    <p>Complaint cause: {{ data.cause }}</p>
-    <p>Description: {{ data.description }}</p>
+<h2>Internal complaint report ID {{ data.id }}</h2>
+<table style="width:50%">
+    <tr>
+        <th>Order number</th>
+        <td>{{ data.order_number }}</td>
+    </tr>
+    <tr>
+        <th>Notifying department:</th>
+        <td>{{ data.user_id }}</td>
+    </tr>
+    <tr>
+        <th>Detection area:</th>
+        <td>{{ data.detection_area }}</td>
+    </tr>
+    <tr>
+        <th>Date:</th>
+        <td>{{ data.timestamp }}</td>
+    </tr>
+    <tr>
+        <th>Product type:</th>
+        <td>{{ data.product_type }}</td>
+    </tr>
+    <tr>
+        <th>Model:</th>
+        <td>{{ data.model }}</td>
+    </tr>
+    <tr>
+        <th>Complaint cause:</th>
+        <td>{{ data.cause }}</td>
+    </tr>
+    <tr>
+        <th>Description cause:</th>
+        <td>{{ data.description }}</td>
+    </tr>
+</table>
 {% endfor %}
-<p>Actions already performed:</p>
-<p>...</p>
-<p>...</p>
-<p>...</p>
-<p>Department chief signature:</p>
-<p>...</p>
+
 </body>
 </html>
 {% endblock %}
-
 
