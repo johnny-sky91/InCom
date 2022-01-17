@@ -9,10 +9,10 @@
     <div class="container">
       <br>
         <div>
-          <a href="{{ url_for('all_complaints') }}">All complaints</a>
           {% if current_user.is_anonymous %}
           <a href="{{ url_for('login') }}">Login</a>
           {% else %}
+          <a href="{{ url_for('all_complaints') }}">All complaints</a>
           <a href="{{ url_for('user_complaints', username=current_user.username) }}">User complaints</a>
           <a href="{{ url_for('new_complaint')}}">New complaint</a>
           <a href="{{ url_for('profile', username=current_user.username) }}">Profile</a>
