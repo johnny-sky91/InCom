@@ -13,6 +13,7 @@ from collections import Counter, defaultdict
 
 @app.route('/')
 @app.route('/all_complaints')
+@login_required
 def all_complaints():
     return render_template('all_complaints.html', title='All complaints')
 
