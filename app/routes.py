@@ -226,11 +226,11 @@ def basic_chart():
     week = datetime.today().isocalendar()[1]
     all_week = {}
     for x in range(1, 6):
-        day = datetime.strptime(f"{year}-W{week}-{x}", "%Y-W%W-%w").strftime("%Y-%m-%d")
+        day = datetime.strptime(f"{year}-W{week}-{x}", "%Y-W%W-%w").strftime("%d-%m-%Y")
         all_week[day] = 0
 
     dates_query = InCom.query.with_entities(InCom.timestamp)
-    dates = [item.strftime("%Y-%m-%d") for t in dates_query for item in t]
+    dates = [item.strftime("%d-%m-%Y") for t in dates_query for item in t]
 
     dates_dict = dict(Counter(dates))
 
@@ -241,4 +241,5 @@ def basic_chart():
         if key in all_week.keys():
             labels.append(key)
             values.append(to_chart[key])
-    return render_template('basic_chart.html', title='Basic chart', labels=labels, values=values)
+    legend = ['Number of internal complaints']
+    return render_template('basic_chart.html', title='Basic chart', labels=labels, values=values, legend=legend)

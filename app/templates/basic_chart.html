@@ -10,7 +10,7 @@ const myChart = new Chart(ctx, {
     data: {
         labels: {{ labels | safe }},
         datasets: [{
-            label: 'Internal complaints',
+            label: {{ legend | safe }},
             data: {{ values | safe }},
             backgroundColor: [
                 'rgb(255, 99, 132)',
