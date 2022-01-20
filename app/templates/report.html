@@ -30,51 +30,52 @@ th{width: 350px;
 <body>
 
 {% for data in report_data %}
-<h1>Internal complaint report ID {{ data.id }}</h1>
+
+<h1>{{ _('Internal complaint ID') }} {{ data.id }}</h1>
 <table>
     <tr>
-        <th>Order number</th>
+        <th>{{ _('Order number') }}</th>
         <td>{{ data.order_number }}</td>
     </tr>
     <tr>
-        <th>Notifying department:</th>
+        <th>{{ _('Notifying department') }}</th>
         <td>{{ data.user_id }}</td>
     </tr>
     <tr>
-        <th>Detection area:</th>
+        <th>{{ _('Detection area') }}:</th>
         <td>{{ data.detection_area }}</td>
     </tr>
     <tr>
-        <th>Date of notification:</th>
+        <th>{{ _('Date of notification') }}:</th>
         <td>{{ moment(data.timestamp).format('DD/MM/YYYY') }}</td>
     </tr>
     <tr>
-        <th>Product type:</th>
+        <th>{{ _('Product type') }}:</th>
         <td>{{ data.product_type }}</td>
     </tr>
     <tr>
-        <th>Model:</th>
+        <th>{{ _('Model') }}:</th>
         <td>{{ data.model }}</td>
     </tr>
     <tr>
-        <th>Complaint cause:</th>
+        <th>{{ _('Complaint cause') }}:</th>
         <td>{{ data.cause }}</td>
     </tr>
     <tr>
-        <th>Description cause:</th>
+        <th>{{ _('Description cause') }}:</th>
         <td>{{ data.description }}</td>
     </tr>
     {% endfor %}
     <tr>
-        <th>Chief of the department signature:</th>
+        <th>{{ _('Chief of the department signature') }}:</th>
         <td><br><br><br></td>
     </tr>
     <tr>
-        <th>Actions already performed:</th>
+        <th>{{ _('Actions already performed') }}:</th>
         <td style="text-align: left;">...<br>...<br>...<br>...<br>...<br></td>
     </tr>
 </table>
-<p>Remember to add a copy of the order</p>
+<p>{{ _('Remember to add a copy of the order') }}</p>
 
 
 </body>
