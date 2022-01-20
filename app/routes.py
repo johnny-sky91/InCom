@@ -23,7 +23,7 @@ def register():
         db.session.commit()
         flash('You have signed up')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Sign up', form=form)
+    return render_template('auth/register.html', title='Sign up', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -41,7 +41,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('all_complaints')
         return redirect(next_page)
-    return render_template('login.html', title='Login', form=form)
+    return render_template('auth/login.html', title='Login', form=form)
 
 
 @app.route('/logout')
@@ -242,4 +242,4 @@ def basic_chart():
             labels.append(key)
             values.append(to_chart[key])
     legend = ['Number of internal complaints']
-    return render_template('basic_chart.html', title='Basic chart', labels=labels, values=values, legend=legend)
+    return render_template('charts/basic_chart.html', title='Basic chart', labels=labels, values=values, legend=legend)
