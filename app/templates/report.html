@@ -29,43 +29,41 @@ th{width: 350px;
 </style>
 <body>
 
-{% for data in report_data %}
 
-<h1>{{ _('Internal complaint ID') }} {{ data.id }}</h1>
+<h1>{{ _('Internal complaint ID') }} {{ report_data.id }}</h1>
 <table>
     <tr>
         <th>{{ _('Order number') }}</th>
-        <td>{{ data.order_number }}</td>
+        <td>{{ report_data.order_number }}</td>
     </tr>
     <tr>
         <th>{{ _('Notifying department') }}</th>
-        <td>{{ data.user_id }}</td>
+        <td>{{ report_data.user_id }}</td>
     </tr>
     <tr>
         <th>{{ _('Detection area') }}:</th>
-        <td>{{ data.detection_area }}</td>
+        <td>{{ report_data.detection_area }}</td>
     </tr>
     <tr>
         <th>{{ _('Date of notification') }}:</th>
-        <td>{{ moment(data.timestamp).format('DD/MM/YYYY') }}</td>
+        <td>{{ moment(report_data.timestamp).format('DD/MM/YYYY') }}</td>
     </tr>
     <tr>
         <th>{{ _('Product type') }}:</th>
-        <td>{{ data.product_type }}</td>
+        <td>{{ report_data.product_type }}</td>
     </tr>
     <tr>
         <th>{{ _('Model') }}:</th>
-        <td>{{ data.model }}</td>
+        <td>{{ report_data.model }}</td>
     </tr>
     <tr>
         <th>{{ _('Complaint cause') }}:</th>
-        <td>{{ data.cause }}</td>
+        <td>{{ report_data.cause }}</td>
     </tr>
     <tr>
         <th>{{ _('Description cause') }}:</th>
-        <td>{{ data.description }}</td>
+        <td>{{ report_data.description }}</td>
     </tr>
-    {% endfor %}
     <tr>
         <th>{{ _('Chief of the department signature') }}:</th>
         <td><br><br><br></td>
