@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 {% block content %}
+{{ moment.include_moment() }}
 
 <style>
 table, th, td {
@@ -45,7 +46,7 @@ th{width: 350px;
     </tr>
     <tr>
         <th>Date of notification:</th>
-        <td>{{ data.timestamp }}</td>
+        <td>{{ moment(data.timestamp).format('DD/MM/YYYY') }}</td>
     </tr>
     <tr>
         <th>Product type:</th>

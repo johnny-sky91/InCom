@@ -19,7 +19,7 @@
       {% for complaint in user_complaints %}
         <tr>
           <td>{{ complaint.id }}</td>
-          <td>{{ complaint.timestamp }}</td>
+          <td>{{ moment(complaint.timestamp).format('DD/MM/YYYY') }}</td>
           <td><a href="{{ complaint.order_link }}">{{ complaint.order_number }}</a></td>
           <td>{{ complaint.detection_area }}</td>
           <td>{{ complaint.product_type }}</td>

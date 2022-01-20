@@ -123,8 +123,6 @@ def user_complaints(username):
             complaint.order_link = complaint.order_number
         else:
             complaint.order_link = os.environ.get('LINK').replace('to_replace', complaint.order_number)
-        complaint.timestamp = complaint.timestamp.replace(tzinfo=timezone.utc).astimezone(tz=None).strftime(
-            '%d/%m/%Y')
     return render_template('user_complaints.html', user=user, title=f'User complaints - {username}',
                            user_complaints=user_complaints_query)
 
