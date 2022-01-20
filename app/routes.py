@@ -10,6 +10,7 @@ from datetime import timezone, datetime
 import flask_excel as excel
 from collections import Counter, defaultdict
 from flask_babel import _
+from flask_babel import lazy_gettext as _l
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -24,7 +25,7 @@ def register():
         db.session.commit()
         flash('You have signed up')
         return redirect(url_for('login'))
-    return render_template('auth/register.html', title='Sign up', form=form)
+    return render_template('auth/register.html', title=_('Sign up'), form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -42,7 +43,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('all_complaints')
         return redirect(next_page)
-    return render_template('auth/login.html', title='Login', form=form)
+    return render_template('auth/login.html', title=_('Login'), form=form)
 
 
 @app.route('/logout')
@@ -55,7 +56,7 @@ def logout():
 @app.route('/all_complaints')
 @login_required
 def all_complaints():
-    return render_template('all_complaints.html', title='All complaints')
+    return render_template('all_complaints.html', title=_('All complaints'))
 
 
 @app.route('/api/data')
@@ -124,6 +125,7 @@ def user_complaints(username):
             complaint.order_link = complaint.order_number
         else:
             complaint.order_link = os.environ.get('LINK').replace('to_replace', complaint.order_number)
+        complaint.complaint_status = _(complaint.complaint_status)
     return render_template('user_complaints.html', user=user, title=f'User complaints - {username}',
                            user_complaints=user_complaints_query)
 
@@ -132,7 +134,7 @@ def user_complaints(username):
 @login_required
 def change_status(reg_id):
     to_change = InCom.query.filter_by(id=reg_id).first()
-    to_change.complaint_status = 'CLOSED'
+    to_change.complaint_status = _('CLOSED')
     db.session.commit()
     flash(f'Complaint ID={reg_id} status changed')
     return redirect(url_for('user_complaints', username=current_user.username))
@@ -203,7 +205,7 @@ def add_new_area(username):
         db.session.commit()
         flash('A new area was added to the department')
         return redirect(url_for('profile', username=username))
-    return render_template('new_area.html', title='Add new area', form=form)
+    return render_template('new_area.html', title=_('Add new area'), form=form)
 
 
 @app.route('/download_csv', methods=['GET'])
@@ -240,4 +242,5 @@ def basic_chart():
             labels.append(key)
             values.append(to_chart[key])
     legend = ['Number of internal complaints']
-    return render_template('charts/basic_chart.html', title='Basic chart', labels=labels, values=values, legend=legend)
+    return render_template('charts/basic_chart.html', title=_('Basic chart'), labels=labels,
+                           values=values, legend=legend)

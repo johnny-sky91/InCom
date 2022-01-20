@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-01-20 15:21+0100\n"
+"POT-Creation-Date: 2022-01-20 21:34+0100\n"
 "PO-Revision-Date: 2022-01-20 14:48+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pl\n"
@@ -20,9 +20,8 @@ msgstr ""
 "Generated-By: Babel 2.9.1\n"
 
 #: app/forms.py:10 app/forms.py:17
-#, fuzzy
 msgid "User"
-msgstr "Przyczyna"
+msgstr "Użytkownik"
 
 #: app/forms.py:11 app/forms.py:19
 msgid "Password"
@@ -32,7 +31,7 @@ msgstr "Hasło"
 msgid "Remember me"
 msgstr "Zapamiętaj mnie"
 
-#: app/forms.py:13 app/templates/base.html:15
+#: app/forms.py:13 app/routes.py:46 app/templates/base.html:15
 msgid "Login"
 msgstr "Zaloguj się"
 
@@ -64,26 +63,25 @@ msgstr "Dodaj nazwę nowego obszaru"
 msgid "Area name cannot be empty"
 msgstr "Nazwa obszaru nie może być pusta"
 
-#: app/forms.py:37
-#, fuzzy
+#: app/forms.py:37 app/routes.py:208
 msgid "Add new area"
 msgstr "Dodaj nowy obszar wykrycia"
 
-#: app/forms.py:41 app/templates/report.html:37
+#: app/forms.py:41 app/templates/report.html:36
 #: app/templates/user_complaints.html:9
 msgid "Order number"
 msgstr "Numer zlecenia"
 
 #: app/forms.py:42
 msgid "Wrong order number (only 5 digits)"
-msgstr "Zły numer zlecenia"
+msgstr "Zły numer zlecenia (tylko 5 cyfr)"
 
-#: app/forms.py:44 app/templates/report.html:53
+#: app/forms.py:44 app/templates/report.html:52
 #: app/templates/user_complaints.html:11
 msgid "Product type"
 msgstr "Rodzaj"
 
-#: app/forms.py:45 app/templates/report.html:57
+#: app/forms.py:45 app/templates/report.html:56
 #: app/templates/user_complaints.html:12
 msgid "Model"
 msgstr "Model"
@@ -92,12 +90,12 @@ msgstr "Model"
 msgid "Cause"
 msgstr "Przyczyna"
 
-#: app/forms.py:47 app/templates/report.html:45
+#: app/forms.py:47 app/templates/report.html:44
 #: app/templates/user_complaints.html:10
 msgid "Detection area"
 msgstr "Obszar wykrycia"
 
-#: app/templates/user_complaints.html:14
+#: app/forms.py:48 app/templates/user_complaints.html:14
 msgid "Description"
 msgstr "Opis"
 
@@ -106,17 +104,28 @@ msgid "Description cannot be empty"
 msgstr "Opis nie może być pusty"
 
 #: app/forms.py:50
-#, fuzzy
 msgid "Add complaint"
-msgstr "Nowa RW"
+msgstr "Zgłoś RW"
 
-#: app/routes.py:38
+#: app/routes.py:28
+msgid "Sign up"
+msgstr "Zarejestruj się"
+
+#: app/routes.py:39
 msgid "Invalid username or password"
 msgstr "Nieprawidłowa nazwa użytkownika lub hasło"
 
-#: app/templates/base.html:17
+#: app/routes.py:59 app/templates/base.html:17
 msgid "All complaints"
 msgstr "Wszystkie RW"
+
+#: app/routes.py:137
+msgid "CLOSED"
+msgstr "Zamknięta"
+
+#: app/routes.py:245 app/templates/base.html:21
+msgid "Basic chart"
+msgstr "Podstawowy wykres"
 
 #: app/templates/base.html:18
 msgid "User complaints"
@@ -130,10 +139,6 @@ msgstr "Nowa RW"
 msgid "Profile"
 msgstr "Profil"
 
-#: app/templates/base.html:21
-msgid "Basic chart"
-msgstr "Podstawowy wykres"
-
 #: app/templates/base.html:22
 msgid "Logout"
 msgstr "Wyloguj się"
@@ -146,35 +151,35 @@ msgstr "Dodaj nowy obszar wykrycia"
 msgid "Download csv file"
 msgstr "Pobierz plik csv"
 
-#: app/templates/report.html:34
+#: app/templates/report.html:33
 msgid "Internal complaint ID"
-msgstr "Numer RW"
+msgstr "Reklamacja wewnętrzna NR"
 
-#: app/templates/report.html:41
+#: app/templates/report.html:40
 msgid "Notifying department"
 msgstr "Dział zgłaszający"
 
-#: app/templates/report.html:49
+#: app/templates/report.html:48
 msgid "Date of notification"
 msgstr "Data zgłoszenia"
 
-#: app/templates/report.html:61
+#: app/templates/report.html:60
 msgid "Complaint cause"
 msgstr "Przyczyna"
 
-#: app/templates/report.html:65
+#: app/templates/report.html:64
 msgid "Description cause"
 msgstr "Opis"
 
-#: app/templates/report.html:70
+#: app/templates/report.html:68
 msgid "Chief of the department signature"
 msgstr "Podpis kierownika działu"
 
-#: app/templates/report.html:74
+#: app/templates/report.html:72
 msgid "Actions already performed"
 msgstr "Czynności już wykonane"
 
-#: app/templates/report.html:78
+#: app/templates/report.html:76
 msgid "Remember to add a copy of the order"
 msgstr "Pamiętaj o dołączeniu kopii zlecenia"
 
@@ -193,4 +198,7 @@ msgstr "Status RW"
 #: app/templates/user_complaints.html:30
 msgid "Report"
 msgstr "Raport"
+
+#~ msgid "Active"
+#~ msgstr "Otwarta"
 

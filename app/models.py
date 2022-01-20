@@ -2,7 +2,8 @@ from app import db, login
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-
+from flask_babel import _
+from flask_babel import lazy_gettext as _l
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
