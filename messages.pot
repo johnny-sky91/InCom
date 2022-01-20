@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-01-20 13:32+0100\n"
+"POT-Creation-Date: 2022-01-20 15:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,36 +17,140 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: app/routes.py:37
+#: app/forms.py:10 app/forms.py:17
+msgid "User"
+msgstr ""
+
+#: app/forms.py:11 app/forms.py:19
+msgid "Password"
+msgstr ""
+
+#: app/forms.py:12
+msgid "Remember me"
+msgstr ""
+
+#: app/forms.py:13 app/templates/base.html:15
+msgid "Login"
+msgstr ""
+
+#: app/forms.py:18
+msgid "Email"
+msgstr ""
+
+#: app/forms.py:20
+msgid "Repeat password"
+msgstr ""
+
+#: app/forms.py:21
+msgid "Register"
+msgstr ""
+
+#: app/forms.py:26
+msgid "Use different name"
+msgstr ""
+
+#: app/forms.py:31
+msgid "Use different email"
+msgstr ""
+
+#: app/forms.py:35
+msgid "Enter a name for the new area"
+msgstr ""
+
+#: app/forms.py:36
+msgid "Area name cannot be empty"
+msgstr ""
+
+#: app/forms.py:37
+msgid "Add new area"
+msgstr ""
+
+#: app/forms.py:41 app/templates/report.html:37
+#: app/templates/user_complaints.html:9
+msgid "Order number"
+msgstr ""
+
+#: app/forms.py:42
+msgid "Wrong order number (only 5 digits)"
+msgstr ""
+
+#: app/forms.py:44 app/templates/report.html:53
+#: app/templates/user_complaints.html:11
+msgid "Product type"
+msgstr ""
+
+#: app/forms.py:45 app/templates/report.html:57
+#: app/templates/user_complaints.html:12
+msgid "Model"
+msgstr ""
+
+#: app/forms.py:46 app/templates/user_complaints.html:13
+msgid "Cause"
+msgstr ""
+
+#: app/forms.py:47 app/templates/report.html:45
+#: app/templates/user_complaints.html:10
+msgid "Detection area"
+msgstr ""
+
+#: app/forms.py:48 app/templates/user_complaints.html:14
+msgid "Description"
+msgstr ""
+
+#: app/forms.py:48
+msgid "Description cannot be empty"
+msgstr ""
+
+#: app/forms.py:50
+msgid "Add complaint"
+msgstr ""
+
+#: app/routes.py:38
 msgid "Invalid username or password"
+msgstr ""
+
+#: app/templates/base.html:17
+msgid "All complaints"
+msgstr ""
+
+#: app/templates/base.html:18
+msgid "User complaints"
+msgstr ""
+
+#: app/templates/base.html:19
+msgid "New complaint"
+msgstr ""
+
+#: app/templates/base.html:20
+msgid "Profile"
+msgstr ""
+
+#: app/templates/base.html:21
+msgid "Basic chart"
+msgstr ""
+
+#: app/templates/base.html:22
+msgid "Logout"
+msgstr ""
+
+#: app/templates/profile.html:4
+msgid "Add a new detection area"
+msgstr ""
+
+#: app/templates/profile.html:5
+msgid "Download csv file"
 msgstr ""
 
 #: app/templates/report.html:34
 msgid "Internal complaint ID"
 msgstr ""
 
-#: app/templates/report.html:37
-msgid "Order number"
-msgstr ""
-
 #: app/templates/report.html:41
 msgid "Notifying department"
 msgstr ""
 
-#: app/templates/report.html:45
-msgid "Detection area"
-msgstr ""
-
 #: app/templates/report.html:49
 msgid "Date of notification"
-msgstr ""
-
-#: app/templates/report.html:53
-msgid "Product type"
-msgstr ""
-
-#: app/templates/report.html:57
-msgid "Model"
 msgstr ""
 
 #: app/templates/report.html:61
@@ -67,5 +171,21 @@ msgstr ""
 
 #: app/templates/report.html:78
 msgid "Remember to add a copy of the order"
+msgstr ""
+
+#: app/templates/user_complaints.html:7
+msgid "Complaint ID"
+msgstr ""
+
+#: app/templates/user_complaints.html:8
+msgid "Date"
+msgstr ""
+
+#: app/templates/user_complaints.html:15
+msgid "Status"
+msgstr ""
+
+#: app/templates/user_complaints.html:30
+msgid "Report"
 msgstr ""
 

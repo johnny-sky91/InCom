@@ -12,14 +12,14 @@
       <br>
         <div>
           {% if current_user.is_anonymous %}
-          <a href="{{ url_for('login') }}">Login</a>
+          <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
           {% else %}
-          <a href="{{ url_for('all_complaints') }}">All complaints</a>
-          <a href="{{ url_for('user_complaints', username=current_user.username) }}">User complaints</a>
-          <a href="{{ url_for('new_complaint')}}">New complaint</a>
-          <a href="{{ url_for('profile', username=current_user.username) }}">Profile</a>
-          <a href="{{ url_for('basic_chart')}}">Basic chart</a>
-          <a href="{{ url_for('logout') }}">Logout</a>
+          <a href="{{ url_for('all_complaints') }}">{{ _('All complaints') }}</a>
+          <a href="{{ url_for('user_complaints', username=current_user.username) }}">{{ _('User complaints') }}</a>
+          <a href="{{ url_for('new_complaint')}}">{{ _('New complaint') }}</a>
+          <a href="{{ url_for('profile', username=current_user.username) }}">{{ _('Profile') }}</a>
+          <a href="{{ url_for('basic_chart')}}">{{ _('Basic chart') }}</a>
+          <a href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
           {% endif %}
         </div>
         <hr>

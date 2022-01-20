@@ -11,6 +11,7 @@ import flask_excel as excel
 from collections import Counter, defaultdict
 from flask_babel import _
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
