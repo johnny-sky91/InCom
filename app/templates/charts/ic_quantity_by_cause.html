@@ -1,41 +1,31 @@
 {% extends "base.html" %}
 
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js" xmlns:></script>
 <script type="text/javascript" src="chartjs-plugin-colorschemes.js"></script>
+<canvas id="basic_chart" width="1200" height="800" aria-label="Hello ARIA World" role="img"></canvas>
+<style>
+canvas {
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
 
-<canvas id="basic_chart" width="300" height="100" aria-label="Hello ARIA World" role="img"></canvas>
+
 <script>
 const ctx = document.getElementById('basic_chart');
 const myChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'pie',
     data: {
         labels: {{ labels | safe }},
-        datasets: [{
-            label: {{ legend | safe }},
+        datasets: [{label: {{ legend | safe }},
             data: {{ values | safe }},
-            backgroundColor: [ {{ colors | safe }}
-                ,
-            ],
+            backgroundColor:  {{ colors | safe }},
         }]
     },
-    options: {
-        layout: {
-            padding: {
-                    left: 120,
-                    right: 120
-                      }
-            },
-            scales: {
-                    y: {beginAtZero: true,
-                    ticks: {
-                            min: 0,
-                            stepSize: 1
-                            },
-                        }
-                    }
-                }
+    options: {responsive: false,layout: {padding: {left: 120,right: 120}}}
 });
+
 
 
 </script>

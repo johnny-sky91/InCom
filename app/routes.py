@@ -1,3 +1,5 @@
+import random
+
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, NewComplaintForm, NewAreaForm
 from app.models import User, InCom, DetectionAreas, Types, Models, Causes
@@ -144,7 +146,7 @@ def change_status(reg_id):
 def get_report(id_to_report):
     report_query = InCom.query.filter_by(id=id_to_report).first()
     report_query.user_id = User.query.filter_by(id=report_query.user_id).first().username
-    return render_template('report.html', title=f'Report ID:{id_to_report}', report_data=report_query)
+    return render_template('report.html', title=f'Report ID: {id_to_report}', report_data=report_query)
 
 
 @app.route('/new_complaint', methods=['GET', 'POST'])
@@ -266,6 +268,11 @@ def ic_quantity_by_cause():
     labels = [",".join(item) for item in labels]
     values = [causes_list[item] for item in causes_list]
     legend = [_('Number of internal complaints')]
-    colors = ['rgb(200, 100, 10)']
+
+    def random_hex_color():
+        rgb = lambda: random.randint(0, 255)
+        return '#%02X%02X%02X' % (rgb(), rgb(), rgb())
+
+    colors = [random_hex_color() for i in range(len(values))]
     return render_template('charts/ic_quantity_by_cause.html', title=_('IC quantity - by cause'),
                            labels=labels, values=values, legend=legend, colors=colors)

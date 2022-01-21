@@ -2,7 +2,13 @@
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<canvas id="basic_chart" width="300" height="100" aria-label="Hello ARIA World" role="img"></canvas>
+<canvas id="basic_chart" width="1000" height="600" aria-label="Hello ARIA World" role="img"></canvas>
+<style>
+canvas {
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
 <script>
 const ctx = document.getElementById('basic_chart');
 const myChart = new Chart(ctx, {
@@ -26,10 +32,7 @@ const myChart = new Chart(ctx, {
             },
             scales: {
                     y: {beginAtZero: true,
-                    ticks: {
-                            min: 0,
-                            stepSize: 1
-                            },
+
                         }
                     }
                 }
