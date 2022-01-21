@@ -220,8 +220,8 @@ def download_csv():
     return excel.make_response_from_dict(result, file_type='csv', file_name='InCom data.csv')
 
 
-@app.route('/basic_chart', methods=['GET'])
-def basic_chart():
+@app.route('/ic_quantity_current_week', methods=['GET'])
+def ic_quantity_current_week():
     year = datetime.today().isocalendar()[0]
     week = datetime.today().isocalendar()[1]
     all_week = {}
@@ -241,6 +241,31 @@ def basic_chart():
         if key in all_week.keys():
             labels.append(key)
             values.append(to_chart[key])
-    legend = ['Number of internal complaints']
-    return render_template('charts/basic_chart.html', title=_('Basic chart'), labels=labels,
-                           values=values, legend=legend)
+    legend = [_('Number of internal complaints')]
+    return render_template('charts/ic_quantity_current_week.html', title=_('IC quantity - current week'),
+                           labels=labels, values=values, legend=legend)
+
+
+@app.route('/ic_quantity_all_weeks', methods=['GET'])
+def ic_quantity_all_weeks():
+    dates_query = InCom.query.with_entities(InCom.timestamp)
+    weeks_list = [item[0].isocalendar()[1] for item in dates_query]
+    weeks_list = Counter(weeks_list)
+    labels = list(weeks_list.keys())
+    values = [weeks_list[item] for item in weeks_list]
+    legend = [_('Number of internal complaints')]
+    return render_template('charts/ic_quantity_all_weeks.html', title=_('IC quantity - all weeks'),
+                           labels=labels, values=values, legend=legend)
+
+
+@app.route('/ic_quantity_by_cause', methods=['GET'])
+def ic_quantity_by_cause():
+    causes_query = InCom.query.with_entities(InCom.cause).all()
+    causes_list = Counter(causes_query)
+    labels = list(causes_list.keys())
+    labels = [",".join(item) for item in labels]
+    values = [causes_list[item] for item in causes_list]
+    legend = [_('Number of internal complaints')]
+    colors = ['rgb(200, 100, 10)']
+    return render_template('charts/ic_quantity_by_cause.html', title=_('IC quantity - by cause'),
+                           labels=labels, values=values, legend=legend, colors=colors)

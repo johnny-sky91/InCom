@@ -18,7 +18,6 @@
           <a href="{{ url_for('user_complaints', username=current_user.username) }}">{{ _('User complaints') }}</a>
           <a href="{{ url_for('new_complaint')}}">{{ _('New complaint') }}</a>
           <a href="{{ url_for('profile', username=current_user.username) }}">{{ _('Profile') }}</a>
-          <a href="{{ url_for('basic_chart')}}">{{ _('Basic chart') }}</a>
           <a href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
           {% endif %}
         </div>

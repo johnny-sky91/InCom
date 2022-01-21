@@ -2,5 +2,10 @@
 
 {% block content %}
 <a href="{{ url_for('add_new_area', username=current_user.username) }}">{{ _('Add a new detection area') }}</a><br>
-<a href="{{ url_for('download_csv') }}">{{ _('Download csv file') }}</a><br>
+<a href="{{ url_for('download_csv') }}">{{ _('Download csv file') }}</a>
+<h2>{{ _('Charts') }}:</h2>
+<a href="{{ url_for('ic_quantity_current_week')}}">{{ _('IC quantity - current week') }}</a><br>
+<a href="{{ url_for('ic_quantity_all_weeks')}}">{{ _('IC quantity - all weeks') }}</a><br>
+<a href="{{ url_for('ic_quantity_by_cause')}}">{{ _('IC quantity - by cause') }}</a><br>
+
 {% endblock %}
