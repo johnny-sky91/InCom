@@ -2,7 +2,7 @@
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<canvas id="basic_chart" width="1500" height="600" aria-label="Hello ARIA World" role="img"></canvas>
+<canvas id="basic_chart" width="1500" height="700" aria-label="Hello ARIA World" role="img"></canvas>
 <style>
 canvas {
     margin-left: auto;
@@ -23,7 +23,10 @@ const myChart = new Chart(ctx, {
     },
     options: {  responsive: false,
                 layout: {padding: {left: 120,right: 120}},
-                scales: { yAxes: {beginAtZero: true} }
+                scales: {   y: {beginAtZero: true,title: {display: true, text: {{ axis_y_label | safe }}, font: {size: 20} }},
+                            x: {title: {display: true, text: {{ axis_x_label | safe }}, font: {size: 20}
+                            }
+                            ,}}
                         }
 });
 

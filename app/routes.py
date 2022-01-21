@@ -244,8 +244,11 @@ def ic_quantity_current_week():
             labels.append(key)
             values.append(to_chart[key])
     legend = [_('Number of internal complaints')]
+    axis_x_label = [_('Days of current week')]
+    axis_y_label = [_('IC quantity')]
     return render_template('charts/ic_quantity_current_week.html', title=_('IC quantity - current week'),
-                           labels=labels, values=values, legend=legend)
+                           labels=labels, values=values, legend=legend, axis_x_label=axis_x_label,
+                           axis_y_label=axis_y_label)
 
 
 @app.route('/ic_quantity_all_weeks', methods=['GET'])
@@ -256,8 +259,11 @@ def ic_quantity_all_weeks():
     labels = list(weeks_list.keys())
     values = [weeks_list[item] for item in weeks_list]
     legend = [_('Number of internal complaints')]
+    axis_x_label = [_('Weeks')]
+    axis_y_label = [_('IC quantity')]
     return render_template('charts/ic_quantity_all_weeks.html', title=_('IC quantity - all weeks'),
-                           labels=labels, values=values, legend=legend)
+                           labels=labels, values=values, legend=legend,
+                           axis_x_label=axis_x_label, axis_y_label=axis_y_label)
 
 
 @app.route('/ic_quantity_by_cause', methods=['GET'])

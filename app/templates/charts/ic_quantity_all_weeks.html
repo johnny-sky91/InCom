@@ -18,24 +18,18 @@ const myChart = new Chart(ctx, {
         datasets: [{
             label: {{ legend | safe }},
             data: {{ values | safe }},
-            backgroundColor: [
-                'rgb(250, 100, 130)',
-            ],
-        }]
+            backgroundColor: ['rgb(200, 100, 10)',],
+            }]
     },
-    options: {
-        layout: {
-            padding: {
-                    left: 120,
-                    right: 120
-                      }
-            },
-            scales: {
-                    y: {beginAtZero: true,
 
+    options: {  responsive: false,
+                layout: {padding: {left: 120,right: 120}},
+                scales: {   y: {beginAtZero: true,title: {display: true, text: {{ axis_y_label | safe }}, font: {size: 20} }},
+                            x: {title: {display: true, text: {{ axis_x_label | safe }}, font: {size: 20}
+                            }
+                            ,}}
                         }
-                    }
-                }
+
 });
 
 
