@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>{{ title }}</title>
+</head>
+
 {% block content %}
 {{ moment.include_moment() }}
 
@@ -14,23 +18,14 @@ table, th, td {
     font-size: 20px;
     font-family:arial;
 }
-h1 {
-    font-family:verdana;
-}
-td{
-    word-wrap:break-word
-}
-th{width: 350px;
-}
-
-
-
-
+h1 {font-family:verdana}
+td { word-wrap:break-word}
+th {width: 350px}
 </style>
+
 <body>
-
-
 <h1>{{ _('Internal complaint ID') }} {{ report_data.id }}</h1>
+
 <table>
     <tr>
         <th>{{ _('Order number') }}:</th>
@@ -74,8 +69,6 @@ th{width: 350px;
     </tr>
 </table>
 <p>{{ _('Remember to add a copy of the order') }}</p>
-
-
 </body>
 </html>
 {% endblock %}
