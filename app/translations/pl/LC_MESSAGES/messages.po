@@ -163,7 +163,7 @@ msgstr "Tygodnie"
 
 #: app/routes.py:267 app/templates/profile.html:8
 msgid "IC quantity - all weeks"
-msgstr "Ilość RW - wyszystkie tygodnie"
+msgstr "Ilość RW - wszystkie tygodnie"
 
 #: app/routes.py:286 app/templates/profile.html:9
 msgid "IC quantity - by cause"
