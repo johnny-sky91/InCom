@@ -128,7 +128,8 @@ def user_complaints(username):
         else:
             complaint.order_link = os.environ.get('LINK').replace('to_replace', complaint.order_number)
         complaint.complaint_status = _(complaint.complaint_status)
-    return render_template('user_complaints.html', user=user, title=f'User complaints - {username}',
+    template_title = _('User complaints')
+    return render_template('user_complaints.html', user=user, title=f'{template_title} - {username}',
                            user_complaints=user_complaints_query)
 
 
@@ -146,7 +147,8 @@ def change_status(reg_id):
 def get_report(id_to_report):
     report_query = InCom.query.filter_by(id=id_to_report).first()
     report_query.user_id = User.query.filter_by(id=report_query.user_id).first().username
-    return render_template('report.html', title=f'Report ID: {id_to_report}', report_data=report_query)
+    template_title = _('Report ID:')
+    return render_template('report.html', title=f'{template_title} {id_to_report}', report_data=report_query)
 
 
 @app.route('/new_complaint', methods=['GET', 'POST'])
@@ -184,14 +186,15 @@ def new_complaint():
         db.session.commit()
         flash('New complaint added')
         return redirect(url_for('user_complaints', username=current_user.username))
-
-    return render_template('new_complaint.html', title=f'New complaint - {current_user.username}', form=form)
+    template_title = _('New complaint')
+    return render_template('new_complaint.html', title=f'{template_title} - {current_user.username}', form=form)
 
 
 @app.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
 def profile(username):
-    return render_template('profile.html', title=f'Profile - {username}')
+    template_title = _('Profile')
+    return render_template('profile.html', title=f'{template_title} - {username}')
 
 
 @app.route('/add_new_area/<username>', methods=['GET', 'POST'])

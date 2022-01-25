@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-01-20 21:34+0100\n"
+"POT-Creation-Date: 2022-01-25 10:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Remember me"
 msgstr ""
 
-#: app/forms.py:13 app/routes.py:46 app/templates/base.html:15
+#: app/forms.py:13 app/routes.py:48 app/templates/base.html:15
 msgid "Login"
 msgstr ""
 
@@ -61,11 +61,11 @@ msgstr ""
 msgid "Area name cannot be empty"
 msgstr ""
 
-#: app/forms.py:37 app/routes.py:208
+#: app/forms.py:37 app/routes.py:213
 msgid "Add new area"
 msgstr ""
 
-#: app/forms.py:41 app/templates/report.html:36
+#: app/forms.py:41 app/templates/report.html:31
 #: app/templates/user_complaints.html:9
 msgid "Order number"
 msgstr ""
@@ -74,12 +74,12 @@ msgstr ""
 msgid "Wrong order number (only 5 digits)"
 msgstr ""
 
-#: app/forms.py:44 app/templates/report.html:52
+#: app/forms.py:44 app/templates/report.html:47
 #: app/templates/user_complaints.html:11
 msgid "Product type"
 msgstr ""
 
-#: app/forms.py:45 app/templates/report.html:56
+#: app/forms.py:45 app/templates/report.html:51
 #: app/templates/user_complaints.html:12
 msgid "Model"
 msgstr ""
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Cause"
 msgstr ""
 
-#: app/forms.py:47 app/templates/report.html:44
+#: app/forms.py:47 app/templates/report.html:39
 #: app/templates/user_complaints.html:10
 msgid "Detection area"
 msgstr ""
@@ -105,39 +105,67 @@ msgstr ""
 msgid "Add complaint"
 msgstr ""
 
-#: app/routes.py:28
+#: app/routes.py:30
 msgid "Sign up"
 msgstr ""
 
-#: app/routes.py:39
+#: app/routes.py:41
 msgid "Invalid username or password"
 msgstr ""
 
-#: app/routes.py:59 app/templates/base.html:17
+#: app/routes.py:61 app/templates/base.html:17
 msgid "All complaints"
 msgstr ""
 
-#: app/routes.py:137
-msgid "CLOSED"
-msgstr ""
-
-#: app/routes.py:245 app/templates/base.html:21
-msgid "Basic chart"
-msgstr ""
-
-#: app/templates/base.html:18
+#: app/routes.py:131 app/templates/base.html:18
 msgid "User complaints"
 msgstr ""
 
-#: app/templates/base.html:19
+#: app/routes.py:140
+msgid "CLOSED"
+msgstr ""
+
+#: app/routes.py:150
+msgid "Report ID:"
+msgstr ""
+
+#: app/routes.py:189 app/templates/base.html:19
 msgid "New complaint"
 msgstr ""
 
-#: app/templates/base.html:20
+#: app/routes.py:196 app/templates/base.html:20
 msgid "Profile"
 msgstr ""
 
-#: app/templates/base.html:22
+#: app/routes.py:249 app/routes.py:264 app/routes.py:279
+msgid "Number of internal complaints"
+msgstr ""
+
+#: app/routes.py:250
+msgid "Days of current week"
+msgstr ""
+
+#: app/routes.py:251 app/routes.py:266
+msgid "IC quantity"
+msgstr ""
+
+#: app/routes.py:252 app/templates/profile.html:7
+msgid "IC quantity - current week"
+msgstr ""
+
+#: app/routes.py:265
+msgid "Weeks"
+msgstr ""
+
+#: app/routes.py:267 app/templates/profile.html:8
+msgid "IC quantity - all weeks"
+msgstr ""
+
+#: app/routes.py:286 app/templates/profile.html:9
+msgid "IC quantity - by cause"
+msgstr ""
+
+#: app/templates/base.html:21
 msgid "Logout"
 msgstr ""
 
@@ -149,35 +177,39 @@ msgstr ""
 msgid "Download csv file"
 msgstr ""
 
-#: app/templates/report.html:33
+#: app/templates/profile.html:6
+msgid "Charts"
+msgstr ""
+
+#: app/templates/report.html:27
 msgid "Internal complaint ID"
 msgstr ""
 
-#: app/templates/report.html:40
+#: app/templates/report.html:35
 msgid "Notifying department"
 msgstr ""
 
-#: app/templates/report.html:48
+#: app/templates/report.html:43
 msgid "Date of notification"
 msgstr ""
 
-#: app/templates/report.html:60
+#: app/templates/report.html:55
 msgid "Complaint cause"
 msgstr ""
 
-#: app/templates/report.html:64
+#: app/templates/report.html:59
 msgid "Description cause"
 msgstr ""
 
-#: app/templates/report.html:68
+#: app/templates/report.html:63
 msgid "Chief of the department signature"
 msgstr ""
 
-#: app/templates/report.html:72
+#: app/templates/report.html:67
 msgid "Actions already performed"
 msgstr ""
 
-#: app/templates/report.html:76
+#: app/templates/report.html:71
 msgid "Remember to add a copy of the order"
 msgstr ""
 
@@ -195,5 +227,13 @@ msgstr ""
 
 #: app/templates/user_complaints.html:30
 msgid "Report"
+msgstr ""
+
+#: app/templates/auth/login.html:22
+msgid "New user?"
+msgstr ""
+
+#: app/templates/auth/login.html:22
+msgid "Click to register"
 msgstr ""
 
