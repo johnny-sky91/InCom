@@ -1,28 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <table id="data" class="table table-striped"style="word-wrap:break-word;table-layout: fixed;">
+
+<table id="data" class="table table-striped" style="table-layout: fixed;word-wrap:break-word;">
     <thead>
-      <tr>
-        <th>Complaint ID</th>
-        <th>Order number</th>
-        <th>Department</th>
-        <th>Detection area</th>
-        <th>Date</th>
-        <th>Product type</th>
-        <th>Model</th>
-        <th>Cause</th>
-        <th>Description</th>
-        <th>Status</th>
-      </tr>
+        <tr>
+            <th style="width:5%">{{ _('Complaint ID') }}</th>
+            <th style="width:10%">{{ _('Order number') }}</th>
+            <th style="width:10%">{{ _('Department') }}</th>
+            <th style="width:10%">{{ _('Detection area') }}</th>
+            <th style="width:10%">{{ _('Date') }}</th>
+            <th style="width:10%">{{ _('Product type') }}</th>
+            <th style="width:10%">{{ _('Model') }}</th>
+            <th style="width:10%">{{ _('Cause') }}</th>
+            <th style="width:40%">{{ _('Description') }}</th>
+            <th style="width:10%">{{ _('Status') }}</th>
+         </tr>
     </thead>
-    <tbody>
-    </tbody>
-  </table>
+</table>
 {% endblock %}
 
 {% block scripts %}
-  <script>
+<script>
     $(document).ready(function () {
       $('#data').DataTable({
         ajax: '/api/data',
@@ -41,5 +40,6 @@
         ],
       });
     });
-  </script>
+</script>
+
 {% endblock %}

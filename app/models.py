@@ -31,7 +31,7 @@ class InCom(db.Model):
     cause = db.Column(db.String(140))
     detection_area = db.Column(db.String(140))
     description = db.Column(db.String(140))
-    complaint_status = db.Column(db.String(140), default='Active')
+    complaint_status = db.Column(db.String(140), default=_('Active'))
 
     def __repr__(self):
         return f'RW: {self.id},{self.user_id},{self.timestamp},{self.order_number},{self.product_type},{self.model}, ' \

@@ -1,44 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 {{ moment.include_moment() }}
-
-<html>
-  <head>
-    <title>{{ title }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
-  </head>
-  <body>
-    <div class="container">
-      <br>
-        <div>
-          {% if current_user.is_anonymous %}
-          <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
-          {% else %}
-          <a href="{{ url_for('all_complaints') }}">{{ _('All complaints') }}</a>
-          <a href="{{ url_for('user_complaints', username=current_user.username) }}">{{ _('User complaints') }}</a>
-          <a href="{{ url_for('new_complaint')}}">{{ _('New complaint') }}</a>
-          <a href="{{ url_for('profile', username=current_user.username) }}">{{ _('Profile') }}</a>
-          <a href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
-          {% endif %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>{{ title }}</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="static/assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{{ url_for('static', filename='Bootstrap/css/styles.css')}}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.4/datatables.min.css"/>
+    </head>
+    <body>
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container" style="max-width: 90%">
+                <a class="navbar-brand" href="#">InCom</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+<!--                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>-->
+                        {% if current_user.is_anonymous %}
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('login') }}">{{ _('Login') }}</a></li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('all_complaints') }}">{{ _('All complaints') }}</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('user_complaints', username=current_user.username) }}">{{ _('User complaints') }}</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('new_complaint')}}">{{ _('New complaint') }}</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('profile', username=current_user.username) }}">{{ _('Profile') }}</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page content-->
+        <div class="container" style="max-width: 90%">
+            <div class="text-left mt-5">
+                <h1>{{ title }}</h1>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>{% for message in messages %}
+                    <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                {% endif %}
+                        {% endwith %}
+                <p class="lead">{% block content %}{% endblock %}</p>
+            </div>
         </div>
-        <hr>
-        <h1>{{ title }}</h1>
-        <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-    </div>
-    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
-    {% block scripts %}
-    {% endblock %}
-  </body>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="static/Bootstrap/js/scripts.js"></script>
+        <!-- Tables JS-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.4/datatables.min.js"></script>
+
+        {% block scripts %}
+        {% endblock %}
+    </body>
 </html>
