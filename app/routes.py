@@ -1,18 +1,18 @@
+import os
 import random
+from collections import Counter, defaultdict
+from datetime import timezone, datetime
+
+import flask_excel as excel
+from flask import render_template, flash, redirect, url_for, request
+from flask_babel import _
+from flask_login import current_user, login_user
+from flask_login import login_required, logout_user
+from werkzeug.urls import url_parse
 
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, NewComplaintForm, NewAreaForm
 from app.models import User, InCom, DetectionAreas, Types, Models, Causes
-from flask import render_template, flash, redirect, url_for, request
-from flask_login import current_user, login_user
-from flask_login import login_required, logout_user
-from werkzeug.urls import url_parse
-import os
-from datetime import timezone, datetime
-import flask_excel as excel
-from collections import Counter, defaultdict
-from flask_babel import _
-from flask_babel import lazy_gettext as _l
 
 
 @app.route('/register', methods=['GET', 'POST'])

@@ -1,14 +1,16 @@
-from flask import Flask
-from config import Config
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager
-from logging.handlers import RotatingFileHandler
-import os
 import logging
-from flask_moment import Moment
-from flask_babel import Babel
+import os
+from logging.handlers import RotatingFileHandler
+
+from flask import Flask
 from flask import request
+from flask_babel import Babel
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from flask_moment import Moment
+from flask_sqlalchemy import SQLAlchemy
+
+from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
