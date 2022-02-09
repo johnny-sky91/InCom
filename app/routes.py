@@ -117,7 +117,7 @@ def complaints_all():
     return render_template('complaints_all.html', title=_('Complaints - all'))
 
 
-@app.route('/api/data_all_complaints')
+@app.route('/api/data_complaints_all')
 def data_complaints_all():
     query_all = InCom.query
     list_all_complaints_column = ['id', 'user_id', 'detection_area', 'timestamp', 'product_type',
@@ -133,7 +133,7 @@ def complaints_user(username):
     return render_template('complaints_user.html', user=user, title=f'{template_title} - {username}')
 
 
-@app.route('/api/data_user_complaints')
+@app.route('/api/data_complaints_user')
 def data_complaints_user():
     # todo dodanie opcji raportu oraz zmiany statusu zlecenia
 
