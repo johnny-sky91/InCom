@@ -22,7 +22,6 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-<!--                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>-->
                         {% if current_user.is_anonymous %}
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('login') }}">{{ _('Login') }}</a></li>
                         {% else %}
@@ -32,6 +31,7 @@
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('profile', username=current_user.username) }}">{{ _('Profile') }}</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
                         {% endif %}
+
                     </ul>
                 </div>
             </div>
@@ -54,7 +54,7 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="static/Bootstrap/js/scripts.js"></script>
+        <script src="{{url_for('static', filename='Bootstrap/js/scripts.js')}}"></script>
         <!-- Tables JS-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.4/datatables.min.js"></script>
