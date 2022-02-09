@@ -29,8 +29,15 @@
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('complaint_new')}}">{{ _('Complaint - new') }}</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('profile', username=current_user.username) }}">{{ _('Profile') }}</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
+<!--                        If tables included, dropdown dont work-->
+<!--                        <li class="nav-item dropdown">-->
+<!--                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Results</a>-->
+<!--                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">-->
+<!--                                <li><a class="dropdown-item" href="#">Results 1</a></li>-->
+<!--                                <li><a class="dropdown-item" href="#">Results 2</a></li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
                         {% endif %}
-
                     </ul>
                 </div>
             </div>
@@ -55,8 +62,8 @@
         <!-- Core theme JS-->
         <script src="{{url_for('static', filename='Bootstrap/js/scripts.js')}}"></script>
         <!-- Tables JS-->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.4/datatables.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
 
         {% block scripts %}
         {% endblock %}
