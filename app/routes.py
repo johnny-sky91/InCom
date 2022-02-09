@@ -111,30 +111,30 @@ def basic_data(query, column_list):
 
 
 @app.route('/')
-@app.route('/all_complaints')
+@app.route('/complaints_all')
 @login_required
-def all_complaints():
-    return render_template('all_complaints.html', title=_('All complaints'))
+def complaints_all():
+    return render_template('complaints_all.html', title=_('Complaints - all'))
 
 
 @app.route('/api/data_all_complaints')
-def data_all_complaints():
+def data_complaints_all():
     query_all = InCom.query
     list_all_complaints_column = ['id', 'user_id', 'detection_area', 'timestamp', 'product_type',
                                   'model', 'cause', 'description', 'complaint_status']
     return basic_data(query_all, list_all_complaints_column)
 
 
-@app.route('/user_complaints/<username>')
+@app.route('/complaints_user/<username>')
 @login_required
-def user_complaints(username):
+def complaints_user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    template_title = _('User complaints')
-    return render_template('user_complaints.html', user=user, title=f'{template_title} - {username}')
+    template_title = _('Complaints - user')
+    return render_template('complaints_user.html', user=user, title=f'{template_title} - {username}')
 
 
 @app.route('/api/data_user_complaints')
-def data_user_complaints():
+def data_complaints_user():
     # todo dodanie opcji raportu oraz zmiany statusu zlecenia
 
     query_all_user = InCom.query.filter_by(user_id=current_user.id)
@@ -167,7 +167,7 @@ def get_report(id_to_report):
 
 @app.route('/new_complaint', methods=['GET', 'POST'])
 @login_required
-def new_complaint():
+def complaint_new():
     form = NewComplaintForm()
 
     areas_query = DetectionAreas.query.with_entities(DetectionAreas.detection_area).filter_by(user_id=current_user.id)
@@ -201,7 +201,7 @@ def new_complaint():
         flash('New complaint added')
         return redirect(url_for('user_complaints', username=current_user.username))
     template_title = _('New complaint')
-    return render_template('new_complaint.html', title=f'{template_title} - {current_user.username}', form=form)
+    return render_template('complaint_new.html', title=f'{template_title} - {current_user.username}', form=form)
 
 
 @app.route('/profile/<username>', methods=['GET', 'POST'])

@@ -26,9 +26,9 @@
                         {% if current_user.is_anonymous %}
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('login') }}">{{ _('Login') }}</a></li>
                         {% else %}
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('all_complaints') }}">{{ _('All complaints') }}</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('user_complaints', username=current_user.username) }}">{{ _('User complaints') }}</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('new_complaint')}}">{{ _('New complaint') }}</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('complaints_all') }}">{{ _('Complaints - all') }}</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('complaints_user', username=current_user.username) }}">{{ _('Complaints - user') }}</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('complaint_new')}}">{{ _('Complaint - new') }}</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('profile', username=current_user.username) }}">{{ _('Profile') }}</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
                         {% endif %}
