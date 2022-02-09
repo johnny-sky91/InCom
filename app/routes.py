@@ -263,7 +263,7 @@ def ic_quantity_current_week():
     legend = [_('Number of internal complaints')]
     axis_x_label = [_('Days of current week')]
     axis_y_label = [_('IC quantity')]
-    return render_template('charts/ic_quantity_current_week.html', title=_('IC quantity - current week'),
+    return render_template('charts/bar_chart.html', title=_('IC quantity - current week'),
                            labels=labels, values=values, legend=legend, axis_x_label=axis_x_label,
                            axis_y_label=axis_y_label)
 
@@ -278,7 +278,7 @@ def ic_quantity_all_weeks():
     legend = [_('Number of internal complaints')]
     axis_x_label = [_('Weeks')]
     axis_y_label = [_('IC quantity')]
-    return render_template('charts/ic_quantity_all_weeks.html', title=_('IC quantity - all weeks'),
+    return render_template('charts/bar_chart.html', title=_('IC quantity - all weeks'),
                            labels=labels, values=values, legend=legend,
                            axis_x_label=axis_x_label, axis_y_label=axis_y_label)
 
@@ -297,5 +297,5 @@ def ic_quantity_by_cause():
         return '#%02X%02X%02X' % (rgb(), rgb(), rgb())
 
     colors = [random_hex_color() for i in range(len(values))]
-    return render_template('charts/ic_quantity_by_cause.html', title=_('IC quantity - by cause'),
+    return render_template('charts/pie_chart.html', title=_('IC quantity - by cause'),
                            labels=labels, values=values, legend=legend, colors=colors)
