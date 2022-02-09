@@ -18,7 +18,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 babel = Babel(app)
-moment =Moment(app)
+moment = Moment(app)
 
 if not app.debug:
     if not os.path.exists('logs'):
