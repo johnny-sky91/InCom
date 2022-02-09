@@ -54,17 +54,7 @@ def logout():
     return redirect(url_for('all_complaints'))
 
 
-@app.route('/')
-@app.route('/all_complaints')
-@login_required
-def all_complaints():
-    return render_template('all_complaints.html', title=_('All complaints'))
-
-
-@app.route('/api/data_all_complaints')
-def data():
-    query = InCom.query
-
+def basic_data(query, column_list):
     # search filter
     search = request.args.get('search[value]')
     if search:
@@ -82,8 +72,7 @@ def data():
         if col_index is None:
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
-        if col_name not in ['id', 'user_id', 'detection_area', 'timestamp', 'product_type',
-                            'model', 'cause', 'description', 'complaint_status']:
+        if col_name not in column_list:
             col_name = 'id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
         col = getattr(InCom, col_name)
@@ -99,16 +88,20 @@ def data():
     length = request.args.get('length', type=int)
     query = query.offset(start).limit(length)
 
+    # extra steps
     final_data = [user.to_dict() for user in query]
-    for x in final_data:
+    for row in final_data:
+        # Adding a link to an external website, if any
         if os.environ.get('LINK') is None:
-            order_number_link = x["order_number"]
+            order_number_link = row["order_number"]
         else:
-            order_number_link = os.environ.get('LINK').replace('to_replace', x["order_number"])
-            order_number_link = f"<a href={order_number_link}>{x['order_number']}</a>"
-        local_timestamp = x["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
-        user = User.query.filter_by(id=x["user_id"]).first().username
-        x.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user})
+            order_number_link = os.environ.get('LINK').replace('to_replace', row["order_number"])
+            order_number_link = f"<a href={order_number_link}>{row['order_number']}</a>"
+        # local timestap from timestap
+        local_timestamp = row["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
+        # username from user_id
+        user = User.query.filter_by(id=row["user_id"]).first().username
+        row.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user})
     # response
     return {
         'data': final_data,
@@ -117,20 +110,41 @@ def data():
     }
 
 
+@app.route('/')
+@app.route('/all_complaints')
+@login_required
+def all_complaints():
+    return render_template('all_complaints.html', title=_('All complaints'))
+
+
+@app.route('/api/data_all_complaints')
+def data_all_complaints():
+    query_all = InCom.query
+    list_all_complaints_column = ['id', 'user_id', 'detection_area', 'timestamp', 'product_type',
+                                  'model', 'cause', 'description', 'complaint_status']
+    return basic_data(query_all, list_all_complaints_column)
+
+
 @app.route('/user_complaints/<username>')
 @login_required
 def user_complaints(username):
     user = User.query.filter_by(username=username).first_or_404()
-    user_complaints_query = InCom.query.filter_by(user_id=current_user.id).order_by(InCom.id.desc()).all()
-    for complaint in user_complaints_query:
-        if os.environ.get('LINK') is None:
-            complaint.order_link = complaint.order_number
-        else:
-            complaint.order_link = os.environ.get('LINK').replace('to_replace', complaint.order_number)
-        complaint.complaint_status = _(complaint.complaint_status)
     template_title = _('User complaints')
-    return render_template('user_complaints.html', user=user, title=f'{template_title} - {username}',
-                           user_complaints=user_complaints_query)
+    return render_template('user_complaints.html', user=user, title=f'{template_title} - {username}')
+
+
+@app.route('/api/data_user_complaints')
+def data_user_complaints():
+    # todo dodanie opcji raportu oraz zmiany statusu zlecenia
+
+    query_all_user = InCom.query.filter_by(user_id=current_user.id)
+    list_user_complaints_column = ['id', 'detection_area', 'timestamp', 'product_type',
+                                   'model', 'cause', 'description', 'complaint_status']
+    result = basic_data(query_all_user, list_user_complaints_column)
+    for row in result['data']:
+        ic_status = f"<a href={url_for('change_status', reg_id=row['id'])}>{row['complaint_status']}</a>"
+        row.update({'complaint_status': ic_status})
+    return result
 
 
 @app.route('/change_status/<reg_id>', methods=['GET', 'POST'])
