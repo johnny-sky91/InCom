@@ -8,7 +8,7 @@ from flask_babel import Babel
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_moment import Moment
 from config import Config
 
 app = Flask(__name__)
@@ -18,6 +18,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 babel = Babel(app)
+moment =Moment(app)
 
 if not app.debug:
     if not os.path.exists('logs'):

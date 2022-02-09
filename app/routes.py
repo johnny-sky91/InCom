@@ -143,7 +143,8 @@ def data_complaints_user():
     result = basic_data(query_all_user, list_user_complaints_column)
     for row in result['data']:
         ic_status = f"<a href={url_for('change_status', reg_id=row['id'])}>{row['complaint_status']}</a>"
-        row.update({'complaint_status': ic_status})
+        report = f"<a href={url_for('get_report', id_to_report=row['id'])}>{row['id']}</a>"
+        row.update({'complaint_status': ic_status, 'id': report})
     return result
 
 
