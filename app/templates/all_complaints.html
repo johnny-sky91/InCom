@@ -5,7 +5,7 @@
 <table id="data" class="table table-striped" style="table-layout: fixed;word-wrap:break-word;">
     <thead>
         <tr>
-            <th style="width:5%">{{ _('Complaint ID') }}</th>
+            <th style="width:10%">{{ _('Complaint ID') }}</th>
             <th style="width:10%">{{ _('Order number') }}</th>
             <th style="width:10%">{{ _('Department') }}</th>
             <th style="width:10%">{{ _('Detection area') }}</th>
@@ -24,7 +24,7 @@
 <script>
     $(document).ready(function () {
       $('#data').DataTable({
-        ajax: '/api/data',
+        ajax: '/api/data_all_complaints',
         serverSide: true,
         columns: [
           {data: 'id'},
