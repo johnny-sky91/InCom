@@ -61,7 +61,7 @@ def all_complaints():
     return render_template('all_complaints.html', title=_('All complaints'))
 
 
-@app.route('/api/data')
+@app.route('/api/data_all_complaints')
 def data():
     query = InCom.query
 
