@@ -10,8 +10,10 @@
         <link rel="icon" type="image/x-icon" href="static/assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{{ url_for('static', filename='Bootstrap/css/styles.css')}}" rel="stylesheet" />
+        <!-- Theme CSS tables.js-->
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.4/datatables.min.css"/>
+
     </head>
     <body>
         <!-- Responsive navbar-->
@@ -61,10 +63,9 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="{{url_for('static', filename='Bootstrap/js/scripts.js')}}"></script>
-        <!-- Tables JS-->
+<!--         Tables.js -->
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.11.4/datatables.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js"></script>
-
         {% block scripts %}
         {% endblock %}
     </body>
