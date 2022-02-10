@@ -101,7 +101,13 @@ def basic_data(query, column_list):
         local_timestamp = row["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
         # username from user_id
         user = User.query.filter_by(id=row["user_id"]).first().username
-        row.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user})
+        # complaint_status for translation
+        if row['complaint_status'] == 'Active':
+            complaint_status = _('Active')
+        else:
+            complaint_status = row["complaint_status"]
+        row.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user,
+                    'complaint_status': complaint_status})
     # response
     return {
         'data': final_data,
@@ -154,8 +160,8 @@ def change_status(reg_id):
     to_change = InCom.query.filter_by(id=reg_id).first()
     to_change.complaint_status = _('CLOSED')
     db.session.commit()
-    flash(f'Complaint ID={reg_id} status changed')
-    return redirect(url_for('user_complaints', username=current_user.username))
+    flash(_('Complaint ID=%(reg_id)s - closed', reg_id=reg_id))
+    return redirect(url_for('complaints_user', username=current_user.username))
 
 
 @app.route('/get_report/<id_to_report>', methods=['GET'])
@@ -199,7 +205,7 @@ def complaint_new():
         )
         db.session.add(incom)
         db.session.commit()
-        flash('New complaint added')
+        flash(_('New complaint added'))
         return redirect(url_for('complaints_user', username=current_user.username))
     template_title = _('Complaint - new')
     return render_template('complaint_new.html', title=f'{template_title} - {current_user.username}', form=form)

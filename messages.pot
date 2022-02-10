@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-10 14:48+0100\n"
+"POT-Creation-Date: 2022-02-10 15:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Area name cannot be empty"
 msgstr ""
 
-#: app/forms.py:37 app/routes.py:228
+#: app/forms.py:37 app/routes.py:234
 msgid "Add new area"
 msgstr ""
 
@@ -107,10 +107,6 @@ msgstr ""
 msgid "Add complaint"
 msgstr ""
 
-#: app/models.py:36
-msgid "Active"
-msgstr ""
-
 #: app/routes.py:30
 msgid "Sign up"
 msgstr ""
@@ -119,55 +115,68 @@ msgstr ""
 msgid "Invalid username or password"
 msgstr ""
 
-#: app/routes.py:117 app/templates/base.html:29
+#: app/routes.py:106
+msgid "Active"
+msgstr ""
+
+#: app/routes.py:123 app/templates/base.html:29
 msgid "Complaints - all"
-msgstr "RW - wszystkie"
+msgstr ""
 
-#: app/routes.py:132 app/templates/base.html:30
+#: app/routes.py:138 app/templates/base.html:30
 msgid "Complaints - user"
-msgstr "RW - użytkownika"
+msgstr ""
 
-#: app/routes.py:155
+#: app/routes.py:161
 msgid "CLOSED"
 msgstr ""
 
-#: app/routes.py:165
+#: app/routes.py:163
+#, python-format
+msgid "Complaint ID=%(reg_id)s - closed"
+msgstr ""
+
+#: app/routes.py:171
 msgid "Report ID:"
 msgstr ""
 
-#: app/routes.py:204 app/templates/base.html:31
-msgid "Complaint - new"
-msgstr "RW - nowa"
+#: app/routes.py:208
+msgid "New complaint added"
+msgstr ""
 
-#: app/routes.py:211 app/templates/base.html:32
+#: app/routes.py:210 app/templates/base.html:31
+msgid "Complaint - new"
+msgstr ""
+
+#: app/routes.py:217 app/templates/base.html:32
 msgid "Profile"
 msgstr ""
 
-#: app/routes.py:264 app/routes.py:279 app/routes.py:294
+#: app/routes.py:270 app/routes.py:285 app/routes.py:300
 msgid "Number of internal complaints"
 msgstr ""
 
-#: app/routes.py:265
+#: app/routes.py:271
 msgid "Days of current week"
 msgstr ""
 
-#: app/routes.py:266 app/routes.py:281
+#: app/routes.py:272 app/routes.py:287
 msgid "IC quantity"
 msgstr ""
 
-#: app/routes.py:267 app/templates/profile.html:8
+#: app/routes.py:273 app/templates/profile.html:8
 msgid "IC quantity - current week"
 msgstr ""
 
-#: app/routes.py:280
+#: app/routes.py:286
 msgid "Weeks"
 msgstr ""
 
-#: app/routes.py:282 app/templates/profile.html:9
+#: app/routes.py:288 app/templates/profile.html:9
 msgid "IC quantity - all weeks"
 msgstr ""
 
-#: app/routes.py:301 app/templates/profile.html:10
+#: app/routes.py:307 app/templates/profile.html:10
 msgid "IC quantity - by cause"
 msgstr ""
 
