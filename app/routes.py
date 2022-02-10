@@ -200,7 +200,7 @@ def complaint_new():
         db.session.add(incom)
         db.session.commit()
         flash('New complaint added')
-        return redirect(url_for('user_complaints', username=current_user.username))
+        return redirect(url_for('complaints_user', username=current_user.username))
     template_title = _('Complaint - new')
     return render_template('complaint_new.html', title=f'{template_title} - {current_user.username}', form=form)
 
