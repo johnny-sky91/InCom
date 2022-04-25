@@ -1,4 +1,4 @@
-from flask_babel import lazy_gettext as _l
+from flask_babel import lazy_gettext as _l # ten as jest tu niepotrzebny i utrudnia czytanie kodu
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, Regexp
@@ -22,12 +22,12 @@ class RegistrationForm(FlaskForm):
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
-        if user is not None:
+        if user is not None: # if not user wystarczy
             raise ValidationError(_l('Use different name'))
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user is not None:
+        user = User.query.filter_by(email=email.data).first() #chyba zmienna powinna nazywac sie "email"?
+        if user is not None: # ditto
             raise ValidationError(_l('Use different email'))
 
 

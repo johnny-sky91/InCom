@@ -11,6 +11,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_moment import Moment
 from config import Config
 
+# osobiście nie lubie wsadzać kodu w __init__.py. Ludzie mają tendencje do olewania tego pliku i zakładania że jest pusty
+# widziałbym ten kod w app.py.
+# Ale to kwestia mocno preferencyjna, masz prawo zingorować tą poradę :P Ktoś inny mógłby się przyczepić, że to powinno być
+
+
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
@@ -31,7 +36,8 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('InCom startup')
 
-from app import routes, models, errors
+from app import routes, models, errors # czy to jest konieczne? Implicit import to trochę zło.import
+# Importuj bezpośrednio w miejscu, w którym dkodu potrzebujesz
 
 
 @babel.localeselector
