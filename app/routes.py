@@ -5,7 +5,7 @@ from datetime import timezone, datetime
 
 import flask_excel as excel
 from flask import render_template, flash, redirect, url_for, request
-from flask_babel import _
+from flask_babel import _ # babel na serio tak oczekuje importu? Brzydkie
 from flask_login import current_user, login_user
 from flask_login import login_required, logout_user
 from werkzeug.urls import url_parse
@@ -37,13 +37,14 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
+        if user is None or not user.check_password(form.password.data): # Is None jest z reguły jest redundant - wystarczy "if not user"
             flash(_('Invalid username or password'))
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('all_complaints')
+            next_page = url_for('all_complaints') # all_complaitns to powinna być stała na samej górze pliku ALL_COMPLAINTS = "all_complaints"
+            # To wbrew pozorm bardzo pomaga, bo jeśli nazwa się zmieni, to wystarczy to zmodyfikować tylko w 1 miejscu
         return redirect(next_page)
     return render_template('auth/login.html', title=_('Login'), form=form)
 
@@ -54,22 +55,24 @@ def logout():
     return redirect(url_for('all_complaints'))
 
 
-def basic_data(query, column_list):
+def basic_data(query, column_list): # Zbyt generyczna nazwa. Nic mi ona nie mówi.
     # search filter
+    # Cała ta funkcja jest zdecydowanie za duża i trudna w czytaniu, nie wspominając o zrozumieniu tego co tu się dzieje.
     search = request.args.get('search[value]')
     if search:
         query = query.filter(db.or_(
             InCom.description.like(f'%{search}%'),
             InCom.order_number.like(f'%{search}%')
         ))
-    total_filtered = query.count()
+    total_filtered = query.count() # redundante, lepiej użyć query.count() tam gdzie go potrzebujesz, zamiast tworzyć dodatkową zmienną
 
     # sorting
+    # sam dałej komenatrz "sorting" więc sam widzisz że logicznie to jest osobny kod - stwórz funkcje _sort() po prostu
     order = []
     i = 0
     while True:
         col_index = request.args.get(f'order[{i}][column]')
-        if col_index is None:
+        if col_index is None: # if not col_index wystarczy
             break
         col_name = request.args.get(f'columns[{col_index}][data]')
         if col_name not in column_list:
@@ -84,20 +87,31 @@ def basic_data(query, column_list):
         query = query.order_by(*order)
 
     # pagination
+    # Flask-sqlachemy wspiera paginacje natywnie
+    # https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination
     start = request.args.get('start', type=int)
     length = request.args.get('length', type=int)
     query = query.offset(start).limit(length)
 
     # extra steps
-    final_data = [user.to_dict() for user in query]
+    final_data = [user.to_dict() for user in query] # Co to jest final_data, skupiasz się na procesie, a nie na naturze danych
+    # Nazwy zmiennych powinny odnosic się do tego, czym sa, a nie jak i dlaczego powstaly
     for row in final_data:
         # Adding a link to an external website, if any
         if os.environ.get('LINK') is None:
             order_number_link = row["order_number"]
         else:
             order_number_link = os.environ.get('LINK').replace('to_replace', row["order_number"])
-            order_number_link = f"<a href={order_number_link}>{row['order_number']}</a>"
+            order_number_link = f"<a href={order_number_link}>{row['order_number']}</a>" # W bazie powinieneś trzymać sam link, nie wrpaujac go w htmla
+            # wprpowanie w htmnla powinienes robic w samym templejcie.
+            # Mozemy sobie wyobrazić sytuacje, w której chcałbyś tego pola użyć np. w API jsonowym
+            # Baza powinna trzymać dane w formie agnostycznej pod względem reprezentacji.
         # local timestap from timestap
+        # Taki komentarz jak powyżej jest zbędny, bo kod poniżej jest oczywisty
+        # Komenatrze powinieneś pisać gdy:
+        # a) robisz coś nieoczywistego
+        # b) łamiesz jakąs konwencje z jakiegoś powodu
+        # c) przekazujesz ważna informcje z punktu widzenia biznesowego tj. dlaczego kod musi zrobić to tak albo inaczej
         local_timestamp = row["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
         # username from user_id
         user = User.query.filter_by(id=row["user_id"]).first().username
@@ -135,7 +149,7 @@ def data_complaints_all():
 @login_required
 def complaints_user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    template_title = _('Complaints - user')
+    template_title = _('Complaints - user') # nie potrzeba tej zmiennej - wsadz  itle=f'{_('Complaints - user')}
     return render_template('complaints_user.html', user=user, title=f'{template_title} - {username}')
 
 
@@ -148,6 +162,10 @@ def data_complaints_user():
                                    'model', 'cause', 'description', 'complaint_status']
     result = basic_data(query_all_user, list_user_complaints_column)
     for row in result['data']:
+        # Widziałbym to trochę inaczej:
+        # ic_status = build_ic_status_href(url_for('change_status', row)
+        # report = build_report_href(url_for('change_status', row)
+        # To będą jedolinijkowe funkcje, tak, ale warto wynosić takie kawałki kodu na zewnątrz.
         ic_status = f"<a href={url_for('change_status', reg_id=row['id'])}>{row['complaint_status']}</a>"
         report = f"<a href={url_for('get_report', id_to_report=row['id'])}>{row['id']}</a>"
         row.update({'complaint_status': ic_status, 'id': report})
@@ -158,7 +176,7 @@ def data_complaints_user():
 @login_required
 def change_status(reg_id):
     to_change = InCom.query.filter_by(id=reg_id).first()
-    to_change.complaint_status = _('CLOSED')
+    to_change.complaint_status = _('CLOSED') # 'CLOSED' to też powinna być stała.
     db.session.commit()
     flash(_('Complaint ID=%(reg_id)s - closed', reg_id=reg_id))
     return redirect(url_for('complaints_user', username=current_user.username))
@@ -176,6 +194,9 @@ def get_report(id_to_report):
 @login_required
 def complaint_new():
     form = NewComplaintForm()
+
+    # Całe te poniższe ~20 lini to bolesna sprawa. Przy każdym requescię wypierniczasz 4 queriesy do bazy.
+    # Spójrz może na https://github.com/wtforms/wtforms-sqlalchemy/blob/master/docs/wtforms_sqlalchemy.rst#orm-backed-fields
 
     areas_query = DetectionAreas.query.with_entities(DetectionAreas.detection_area).filter_by(user_id=current_user.id)
     areas = [item for t in areas_query for item in t]
@@ -240,7 +261,7 @@ def download_csv():
     result = defaultdict(list)
     for row in InCom.query.all():
         res = row.__dict__
-        res.pop('_sa_instance_state')
+        res.pop('_sa_instance_state') # cwaniaczek :D
         for key in res:
             result[key].append(res[key])
     return excel.make_response_from_dict(result, file_type='csv', file_name='InCom data.csv')
@@ -255,10 +276,11 @@ def ic_quantity_current_week():
         day = datetime.strptime(f"{year}-W{week}-{x}", "%Y-W%W-%w").strftime("%d-%m-%Y")
         all_week[day] = 0
 
-    dates_query = InCom.query.with_entities(InCom.timestamp)
+    dates_query = InCom.query.with_entities(InCom.timestamp) #  Nie nazywaj bazodanowych zmiennych na posdtaiwe query, tylko tego, co te dane reprezentują.
+    # Przyznam ze przez to troche mi trudno zrozumiec co ta funkcja w ogole robi
     dates = [item.strftime("%d-%m-%Y") for t in dates_query for item in t]
 
-    dates_dict = dict(Counter(dates))
+    dates_dict = dict(Counter(dates)) # Dlaczego potrzbujesz tego Countera? I tak przerabiasz to na dict
 
     to_chart = {**all_week, **dates_dict}
     labels = []
@@ -301,7 +323,8 @@ def ic_quantity_by_cause():
 
     def random_hex_color():
         rgb = lambda: random.randint(0, 255)
-        return '#%02X%02X%02X' % (rgb(), rgb(), rgb())
+        return '#%02X%02X%02X' % (rgb(), rgb(), rgb()) # a wez to przerob na fstringa jak to wczesniej miales ladnie zrobione
+        # widac ze przeklejone ze stacka :D
 
     colors = [random_hex_color() for i in range(len(values))]
     return render_template('charts/pie_chart.html', title=_('IC quantity - by cause'),
