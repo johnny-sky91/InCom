@@ -51,7 +51,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('all_complaints'))
+    return redirect(url_for('complaints_all'))
 
 
 def basic_data(query, column_list):
