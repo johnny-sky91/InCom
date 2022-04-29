@@ -43,7 +43,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('all_complaints')
+            next_page = url_for('complaints_all')
         return redirect(next_page)
     return render_template('auth/login.html', title=_('Login'), form=form)
 
@@ -300,8 +300,7 @@ def ic_quantity_by_cause():
     legend = [_('Number of internal complaints')]
 
     def random_hex_color():
-        rgb = lambda: random.randint(0, 255)
-        return '#%02X%02X%02X' % (rgb(), rgb(), rgb())
+        return f'#{os.urandom(3).hex()}'
 
     colors = [random_hex_color() for i in range(len(values))]
     return render_template('charts/pie_chart.html', title=_('IC quantity - by cause'),
