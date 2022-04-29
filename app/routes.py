@@ -14,6 +14,8 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, NewComplaintForm, NewAreaForm
 from app.models import User, InCom, DetectionAreas, Types, Models, Causes
 
+CLOSED = _('CLOSED')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -158,7 +160,7 @@ def data_complaints_user():
 @login_required
 def change_status(reg_id):
     to_change = InCom.query.filter_by(id=reg_id).first()
-    to_change.complaint_status = _('CLOSED')
+    to_change.complaint_status = CLOSED
     db.session.commit()
     flash(_('Complaint ID=%(reg_id)s - closed', reg_id=reg_id))
     return redirect(url_for('complaints_user', username=current_user.username))
