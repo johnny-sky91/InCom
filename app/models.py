@@ -9,9 +9,9 @@ from app import db, login
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
+    username = db.Column(db.String(255), index=True, unique=True)
+    email = db.Column(db.String(255), index=True, unique=True)
+    password_hash = db.Column(db.String(255))
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -27,13 +27,13 @@ class InCom(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    order_number = db.Column(db.String(140))
-    product_type = db.Column(db.String(140))
-    model = db.Column(db.String(140))
-    cause = db.Column(db.String(140))
-    detection_area = db.Column(db.String(140))
-    description = db.Column(db.String(140))
-    complaint_status = db.Column(db.String(140), default='Active')
+    order_number = db.Column(db.String(255))
+    product_type = db.Column(db.String(255))
+    model = db.Column(db.String(255))
+    cause = db.Column(db.String(255))
+    detection_area = db.Column(db.String(255))
+    description = db.Column(db.String(255))
+    complaint_status = db.Column(db.String(255), default='Active')
 
     def __repr__(self):
         return f'RW: {self.id},{self.user_id},{self.timestamp},{self.order_number},{self.product_type},{self.model}, ' \
@@ -56,23 +56,23 @@ class InCom(db.Model):
 
 class Models(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_model = db.Column(db.String(140))
+    product_model = db.Column(db.String(255))
 
 
 class Types(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_type = db.Column(db.String(140))
+    product_type = db.Column(db.String(255))
 
 
 class Causes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    cause_type = db.Column(db.String(140))
+    cause_type = db.Column(db.String(255))
 
 
 class DetectionAreas(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
-    detection_area = db.Column(db.String(140))
+    detection_area = db.Column(db.String(255))
 
 
 @login.user_loader
