@@ -16,17 +16,22 @@ from app.models import User, InCom, DetectionAreas, Types, Models, Causes
 
 CLOSED = _('CLOSED')
 ACTIVE = _('ACTIVE')
-SIGN_UP = _('Sign up')
-LOGIN = _('Login')
-COMPLAINTS_ALL = _('Complaints - all')
-COMPLAINTS_USER = _('Complaints - user')
-COMPLAINT_NEW = _('Complaint - new')
-REPORT_ID = _('Report ID:')
-USER_PROFILE = _('Profile')
-ADD_NEW_AREA = _('Add new area')
-IC_QUANTITY_CURRENT_WEEK = _('IC quantity - current week')
-IC_QUANTITY_ALL_WEEKS = _('IC quantity - all weeks')
-IC_QUANTITY_BY_CAUSE = _('IC quantity - by cause')
+TITLE_SIGN_UP = _('Sign up')
+TITLE_LOGIN = _('Login')
+TITLE_COMPLAINTS_ALL = _('Complaints - all')
+TITLE_COMPLAINTS_USER = _('Complaints - user')
+TITLE_COMPLAINT_NEW = _('Complaint - new')
+TITLE_REPORT_ID = _('Report ID:')
+TITLE_USER_PROFILE = _('Profile')
+TITLE_ADD_NEW_AREA = _('Add new area')
+TITLE_IC_QUANTITY_CURRENT_WEEK = _('IC quantity - current week')
+TITLE_IC_QUANTITY_ALL_WEEKS = _('IC quantity - all weeks')
+TITLE_IC_QUANTITY_BY_CAUSE = _('IC quantity - by cause')
+
+COMPLAINTS_ALL = 'complaints_all'
+COMPLAINTS_USER = 'complaints_user'
+PROFILE = 'profile'
+LOGIN = 'login'
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -40,32 +45,32 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('You have signed up')
-        return redirect(url_for('login'))
-    return render_template('auth/register.html', title=SIGN_UP, form=form)
+        return redirect(url_for(LOGIN))
+    return render_template('auth/register.html', title=TITLE_SIGN_UP, form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('complaints_all'))
+        return redirect(url_for(COMPLAINTS_ALL))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash(_('Invalid username or password'))
-            return redirect(url_for('login'))
+            return redirect(url_for(LOGIN))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('complaints_all')
+            next_page = url_for(COMPLAINTS_ALL)
         return redirect(next_page)
-    return render_template('auth/login.html', title=LOGIN, form=form)
+    return render_template('auth/login.html', title=TITLE_LOGIN, form=form)
 
 
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('complaints_all'))
+    return redirect(url_for(COMPLAINTS_ALL))
 
 
 def basic_data(query, column_list):
@@ -134,7 +139,7 @@ def basic_data(query, column_list):
 @app.route('/complaints_all')
 @login_required
 def complaints_all():
-    return render_template('complaints_all.html', title=COMPLAINTS_ALL)
+    return render_template('complaints_all.html', title=TITLE_COMPLAINTS_ALL)
 
 
 @app.route('/api/data_complaints_all')
@@ -149,7 +154,7 @@ def data_complaints_all():
 @login_required
 def complaints_user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('complaints_user.html', user=user, title=f'{COMPLAINTS_USER} - {username}')
+    return render_template('complaints_user.html', user=user, title=f'{TITLE_COMPLAINTS_USER} - {username}')
 
 
 @app.route('/api/data_complaints_user')
@@ -174,14 +179,14 @@ def change_status(reg_id):
     to_change.complaint_status = CLOSED
     db.session.commit()
     flash(_('Complaint ID=%(reg_id)s - closed', reg_id=reg_id))
-    return redirect(url_for('complaints_user', username=current_user.username))
+    return redirect(url_for(COMPLAINTS_USER, username=current_user.username))
 
 
 @app.route('/get_report/<id_to_report>', methods=['GET'])
 def get_report(id_to_report):
     report_query = InCom.query.filter_by(id=id_to_report).first()
     report_query.user_id = User.query.filter_by(id=report_query.user_id).first().username
-    return render_template('report.html', title=f'{REPORT_ID} {id_to_report}', report_data=report_query)
+    return render_template('report.html', title=f'{TITLE_REPORT_ID} {id_to_report}', report_data=report_query)
 
 
 @app.route('/new_complaint', methods=['GET', 'POST'])
@@ -218,14 +223,14 @@ def complaint_new():
         db.session.add(incom)
         db.session.commit()
         flash(_('New complaint added'))
-        return redirect(url_for('complaints_user', username=current_user.username))
-    return render_template('complaint_new.html', title=f'{COMPLAINT_NEW} - {current_user.username}', form=form)
+        return redirect(url_for(COMPLAINTS_USER, username=current_user.username))
+    return render_template('complaint_new.html', title=f'{TITLE_COMPLAINT_NEW} - {current_user.username}', form=form)
 
 
 @app.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
 def profile(username):
-    return render_template('profile.html', title=f'{PROFILE} - {username}')
+    return render_template('profile.html', title=f'{TITLE_USER_PROFILE} - {username}')
 
 
 @app.route('/add_new_area/<username>', methods=['GET', 'POST'])
@@ -240,8 +245,8 @@ def add_new_area(username):
         db.session.add(new_area)
         db.session.commit()
         flash('A new area was added to the department')
-        return redirect(url_for('profile', username=username))
-    return render_template('new_area.html', title=ADD_NEW_AREA, form=form)
+        return redirect(url_for(PROFILE, username=username))
+    return render_template('new_area.html', title=TITLE_ADD_NEW_AREA, form=form)
 
 
 @app.route('/download_csv', methods=['GET'])
@@ -280,9 +285,8 @@ def ic_quantity_current_week():
     legend = [_('Number of internal complaints')]
     axis_x_label = [_('Days of current week')]
     axis_y_label = [_('IC quantity')]
-    return render_template('charts/bar_chart.html', title=IC_QUANTITY_CURRENT_WEEK,
-                           labels=labels, values=values, legend=legend, axis_x_label=axis_x_label,
-                           axis_y_label=axis_y_label)
+    return render_template('charts/bar_chart.html', title=TITLE_IC_QUANTITY_CURRENT_WEEK, labels=labels, values=values,
+                           legend=legend, axis_x_label=axis_x_label, axis_y_label=axis_y_label)
 
 
 @app.route('/ic_quantity_all_weeks', methods=['GET'])
@@ -295,9 +299,8 @@ def ic_quantity_all_weeks():
     legend = [_('Number of internal complaints')]
     axis_x_label = [_('Weeks')]
     axis_y_label = [_('IC quantity')]
-    return render_template('charts/bar_chart.html', title=IC_QUANTITY_ALL_WEEKS,
-                           labels=labels, values=values, legend=legend,
-                           axis_x_label=axis_x_label, axis_y_label=axis_y_label)
+    return render_template('charts/bar_chart.html', title=TITLE_IC_QUANTITY_ALL_WEEKS, labels=labels, values=values,
+                           legend=legend, axis_x_label=axis_x_label, axis_y_label=axis_y_label)
 
 
 @app.route('/ic_quantity_by_cause', methods=['GET'])
@@ -313,5 +316,5 @@ def ic_quantity_by_cause():
         return f'#{os.urandom(3).hex()}'
 
     colors = [random_hex_color() for i in range(len(values))]
-    return render_template('charts/pie_chart.html', title=IC_QUANTITY_BY_CAUSE,
-                           labels=labels, values=values, legend=legend, colors=colors)
+    return render_template('charts/pie_chart.html', title=TITLE_IC_QUANTITY_BY_CAUSE, labels=labels, values=values,
+                           legend=legend, colors=colors)
