@@ -73,7 +73,7 @@ def logout():
     return redirect(url_for(COMPLAINTS_ALL))
 
 
-def basic_data(query, column_list):
+def data_for_table(query, column_list):
     # search filter
     search = request.args.get('search[value]')
     if search:
@@ -147,7 +147,7 @@ def data_complaints_all():
     query_all = InCom.query
     list_all_complaints_column = ['id', 'user_id', 'detection_area', 'timestamp', 'product_type',
                                   'model', 'cause', 'description', 'complaint_status']
-    return basic_data(query_all, list_all_complaints_column)
+    return data_for_table(query_all, list_all_complaints_column)
 
 
 @app.route('/complaints_user/<username>')
@@ -164,7 +164,7 @@ def data_complaints_user():
     query_all_user = InCom.query.filter_by(user_id=current_user.id)
     list_user_complaints_column = ['id', 'detection_area', 'timestamp', 'product_type',
                                    'model', 'cause', 'description', 'complaint_status']
-    result = basic_data(query_all_user, list_user_complaints_column)
+    result = data_for_table(query_all_user, list_user_complaints_column)
     for row in result['data']:
         ic_status = f"<a href={url_for('change_status', reg_id=row['id'])}>{row['complaint_status']}</a>"
         report = f"<a href={url_for('get_report', id_to_report=row['id'])}>{row['id']}</a>"
