@@ -74,7 +74,6 @@ def logout():
 
 
 def data_for_table(query, column_list):
-    # search filter
     search = request.args.get('search[value]')
     if search:
         query = query.filter(db.or_(
@@ -83,7 +82,6 @@ def data_for_table(query, column_list):
         ))
     total_filtered = query.count()
 
-    # sorting
     order = []
     i = 0
     while True:
@@ -102,29 +100,25 @@ def data_for_table(query, column_list):
     if order:
         query = query.order_by(*order)
 
-    # pagination
     start = request.args.get('start', type=int)
     length = request.args.get('length', type=int)
     query = query.offset(start).limit(length)
 
-    # extra steps
-    final_data = [user.to_dict() for user in query]
-    for row in final_data:
-        # Adding a link to an external website, if any
+    final_data_for_table = [user.to_dict() for user in query]
+    for row in final_data_for_table:
         if os.environ.get('LINK') is None:
             order_number_link = row["order_number"]
         else:
             order_number_link = os.environ.get('LINK').replace('to_replace', row["order_number"])
             order_number_link = f"<a href={order_number_link}>{row['order_number']}</a>"
-        # local timestap from timestap
         local_timestamp = row["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
-        # username from user_id
+
         user = User.query.filter_by(id=row["user_id"]).first().username
 
         row.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user})
-    # response
+
     return {
-        'data': final_data,
+        'data': final_data_for_table,
         'recordsFiltered': total_filtered,
         'recordsTotal': InCom.query.count(),
     }
