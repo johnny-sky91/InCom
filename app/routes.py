@@ -120,13 +120,8 @@ def data_for_table(query, column_list):
         local_timestamp = row["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
         # username from user_id
         user = User.query.filter_by(id=row["user_id"]).first().username
-        # complaint_status for translation
-        if row['complaint_status'] == ACTIVE:
-            complaint_status = ACTIVE
-        else:
-            complaint_status = row["complaint_status"]
-        row.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user,
-                    'complaint_status': complaint_status})
+
+        row.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user})
     # response
     return {
         'data': final_data,
