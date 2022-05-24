@@ -146,17 +146,23 @@ def complaints_user(username):
     return render_template('complaints_user.html', user=user, title=f'{TITLE_COMPLAINTS_USER} - {username}')
 
 
+def build_ic_status_href(row):
+    return f"<a href={url_for('change_status', reg_id=row['id'])}>{row['complaint_status']}</a>"
+
+
+def build_report_href(row):
+    return f"<a href={url_for('get_report', id_to_report=row['id'])}>{row['id']}</a>"
+
+
 @app.route('/api/data_complaints_user')
 def data_complaints_user():
-    # todo dodanie opcji raportu oraz zmiany statusu zlecenia
-
     query_all_user = InCom.query.filter_by(user_id=current_user.id)
     list_user_complaints_column = ['id', 'detection_area', 'timestamp', 'product_type',
                                    'model', 'cause', 'description', 'complaint_status']
     result = data_for_table(query_all_user, list_user_complaints_column)
     for row in result['data']:
-        ic_status = f"<a href={url_for('change_status', reg_id=row['id'])}>{row['complaint_status']}</a>"
-        report = f"<a href={url_for('get_report', id_to_report=row['id'])}>{row['id']}</a>"
+        ic_status = build_ic_status_href(row)
+        report = build_report_href(row)
         row.update({'complaint_status': ic_status, 'id': report})
     return result
 
