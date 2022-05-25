@@ -256,27 +256,21 @@ def download_csv():
     return excel.make_response_from_dict(result, file_type='csv', file_name='InCom data.csv')
 
 
-@app.route('/ic_quantity_current_week', methods=['GET'])
-def ic_quantity_current_week():
+def current_workweek_dates():
     year = datetime.today().isocalendar()[0]
     week = datetime.today().isocalendar()[1]
-    all_week = {}
-    for x in range(1, 6):
-        day = datetime.strptime(f"{year}-W{week}-{x}", "%Y-W%W-%w").strftime("%d-%m-%Y")
-        all_week[day] = 0
+    workweek_dates = [datetime.strptime(f"{year}-W{week}-{x}", "%Y-W%W-%w").strftime("%d-%m-%Y") for x in range(1, 6)]
+    return workweek_dates
 
+
+@app.route('/ic_quantity_current_week', methods=['GET'])
+def ic_quantity_current_week():
     dates_query = InCom.query.with_entities(InCom.timestamp)
-    dates = [item.strftime("%d-%m-%Y") for t in dates_query for item in t]
+    current_week_dates = [date[0].strftime("%d-%m-%Y") for date in dates_query if
+                          date[0].isocalendar()[1] == datetime.today().isocalendar()[1]]
+    labels = current_workweek_dates()
+    values = list(Counter(current_week_dates).values())
 
-    dates_dict = dict(Counter(dates))
-
-    to_chart = {**all_week, **dates_dict}
-    labels = []
-    values = []
-    for key in to_chart:
-        if key in all_week.keys():
-            labels.append(key)
-            values.append(to_chart[key])
     legend = [_('Number of internal complaints')]
     axis_x_label = [_('Days of current week')]
     axis_y_label = [_('IC quantity')]
