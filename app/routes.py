@@ -265,8 +265,8 @@ def current_workweek_dates():
 
 @app.route('/ic_quantity_current_week', methods=['GET'])
 def ic_quantity_current_week():
-    dates_query = InCom.query.with_entities(InCom.timestamp)
-    current_week_dates = [date[0].strftime("%d-%m-%Y") for date in dates_query if
+    all_timestaps = InCom.query.with_entities(InCom.timestamp)
+    current_week_dates = [date[0].strftime("%d-%m-%Y") for date in all_timestaps if
                           date[0].isocalendar()[1] == datetime.today().isocalendar()[1]]
     labels = current_workweek_dates()
     values = list(Counter(current_week_dates).values())
