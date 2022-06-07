@@ -1,18 +1,35 @@
 import os
-import random
 from collections import Counter, defaultdict
 from datetime import timezone, datetime
 
 import flask_excel as excel
 from flask import render_template, flash, redirect, url_for, request
 from flask_babel import _
-from flask_login import current_user, login_user
-from flask_login import login_required, logout_user
+from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, NewComplaintForm, NewAreaForm
 from app.models import User, InCom, DetectionAreas, Types, Models, Causes
+
+CLOSED = _('CLOSED')
+ACTIVE = _('ACTIVE')
+TITLE_SIGN_UP = _('Sign up')
+TITLE_LOGIN = _('Login')
+TITLE_COMPLAINTS_ALL = _('Complaints - all')
+TITLE_COMPLAINTS_USER = _('Complaints - user')
+TITLE_COMPLAINT_NEW = _('Complaint - new')
+TITLE_REPORT_ID = _('Report ID:')
+TITLE_USER_PROFILE = _('Profile')
+TITLE_ADD_NEW_AREA = _('Add new area')
+TITLE_IC_QUANTITY_CURRENT_WEEK = _('IC quantity - current week')
+TITLE_IC_QUANTITY_ALL_WEEKS = _('IC quantity - all weeks')
+TITLE_IC_QUANTITY_BY_CAUSE = _('IC quantity - by cause')
+
+COMPLAINTS_ALL = 'complaints_all'
+COMPLAINTS_USER = 'complaints_user'
+PROFILE = 'profile'
+LOGIN = 'login'
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -26,36 +43,35 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('You have signed up')
-        return redirect(url_for('login'))
-    return render_template('auth/register.html', title=_('Sign up'), form=form)
+        return redirect(url_for(LOGIN))
+    return render_template('auth/register.html', title=TITLE_SIGN_UP, form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('complaints_all'))
+        return redirect(url_for(COMPLAINTS_ALL))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
+        if not user or not user.check_password(form.password.data):
             flash(_('Invalid username or password'))
-            return redirect(url_for('login'))
+            return redirect(url_for(LOGIN))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('all_complaints')
+            next_page = url_for(COMPLAINTS_ALL)
         return redirect(next_page)
-    return render_template('auth/login.html', title=_('Login'), form=form)
+    return render_template('auth/login.html', title=TITLE_LOGIN, form=form)
 
 
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('complaints_all'))
+    return redirect(url_for(COMPLAINTS_ALL))
 
 
-def basic_data(query, column_list):
-    # search filter
+def data_for_table(query, column_list):
     search = request.args.get('search[value]')
     if search:
         query = query.filter(db.or_(
@@ -64,7 +80,6 @@ def basic_data(query, column_list):
         ))
     total_filtered = query.count()
 
-    # sorting
     order = []
     i = 0
     while True:
@@ -83,34 +98,25 @@ def basic_data(query, column_list):
     if order:
         query = query.order_by(*order)
 
-    # pagination
     start = request.args.get('start', type=int)
     length = request.args.get('length', type=int)
     query = query.offset(start).limit(length)
 
-    # extra steps
-    final_data = [user.to_dict() for user in query]
-    for row in final_data:
-        # Adding a link to an external website, if any
+    final_data_for_table = [user.to_dict() for user in query]
+    for row in final_data_for_table:
         if os.environ.get('LINK') is None:
             order_number_link = row["order_number"]
         else:
             order_number_link = os.environ.get('LINK').replace('to_replace', row["order_number"])
             order_number_link = f"<a href={order_number_link}>{row['order_number']}</a>"
-        # local timestap from timestap
         local_timestamp = row["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
-        # username from user_id
+
         user = User.query.filter_by(id=row["user_id"]).first().username
-        # complaint_status for translation
-        if row['complaint_status'] == 'Active':
-            complaint_status = _('Active')
-        else:
-            complaint_status = row["complaint_status"]
-        row.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user,
-                    'complaint_status': complaint_status})
-    # response
+
+        row.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user})
+
     return {
-        'data': final_data,
+        'data': final_data_for_table,
         'recordsFiltered': total_filtered,
         'recordsTotal': InCom.query.count(),
     }
@@ -120,7 +126,7 @@ def basic_data(query, column_list):
 @app.route('/complaints_all')
 @login_required
 def complaints_all():
-    return render_template('complaints_all.html', title=_('Complaints - all'))
+    return render_template('complaints_all.html', title=TITLE_COMPLAINTS_ALL)
 
 
 @app.route('/api/data_complaints_all')
@@ -128,28 +134,33 @@ def data_complaints_all():
     query_all = InCom.query
     list_all_complaints_column = ['id', 'user_id', 'detection_area', 'timestamp', 'product_type',
                                   'model', 'cause', 'description', 'complaint_status']
-    return basic_data(query_all, list_all_complaints_column)
+    return data_for_table(query_all, list_all_complaints_column)
 
 
 @app.route('/complaints_user/<username>')
 @login_required
 def complaints_user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    template_title = _('Complaints - user')
-    return render_template('complaints_user.html', user=user, title=f'{template_title} - {username}')
+    return render_template('complaints_user.html', user=user, title=f'{TITLE_COMPLAINTS_USER} - {username}')
+
+
+def build_ic_status_href(row):
+    return f"<a href={url_for('change_status', reg_id=row['id'])}>{row['complaint_status']}</a>"
+
+
+def build_report_href(row):
+    return f"<a href={url_for('get_report', id_to_report=row['id'])}>{row['id']}</a>"
 
 
 @app.route('/api/data_complaints_user')
 def data_complaints_user():
-    # todo dodanie opcji raportu oraz zmiany statusu zlecenia
-
     query_all_user = InCom.query.filter_by(user_id=current_user.id)
     list_user_complaints_column = ['id', 'detection_area', 'timestamp', 'product_type',
                                    'model', 'cause', 'description', 'complaint_status']
-    result = basic_data(query_all_user, list_user_complaints_column)
+    result = data_for_table(query_all_user, list_user_complaints_column)
     for row in result['data']:
-        ic_status = f"<a href={url_for('change_status', reg_id=row['id'])}>{row['complaint_status']}</a>"
-        report = f"<a href={url_for('get_report', id_to_report=row['id'])}>{row['id']}</a>"
+        ic_status = build_ic_status_href(row)
+        report = build_report_href(row)
         row.update({'complaint_status': ic_status, 'id': report})
     return result
 
@@ -158,18 +169,17 @@ def data_complaints_user():
 @login_required
 def change_status(reg_id):
     to_change = InCom.query.filter_by(id=reg_id).first()
-    to_change.complaint_status = _('CLOSED')
+    to_change.complaint_status = CLOSED
     db.session.commit()
     flash(_('Complaint ID=%(reg_id)s - closed', reg_id=reg_id))
-    return redirect(url_for('complaints_user', username=current_user.username))
+    return redirect(url_for(COMPLAINTS_USER, username=current_user.username))
 
 
 @app.route('/get_report/<id_to_report>', methods=['GET'])
 def get_report(id_to_report):
     report_query = InCom.query.filter_by(id=id_to_report).first()
     report_query.user_id = User.query.filter_by(id=report_query.user_id).first().username
-    template_title = _('Report ID:')
-    return render_template('report.html', title=f'{template_title} {id_to_report}', report_data=report_query)
+    return render_template('report.html', title=f'{TITLE_REPORT_ID} {id_to_report}', report_data=report_query)
 
 
 @app.route('/new_complaint', methods=['GET', 'POST'])
@@ -206,16 +216,14 @@ def complaint_new():
         db.session.add(incom)
         db.session.commit()
         flash(_('New complaint added'))
-        return redirect(url_for('complaints_user', username=current_user.username))
-    template_title = _('Complaint - new')
-    return render_template('complaint_new.html', title=f'{template_title} - {current_user.username}', form=form)
+        return redirect(url_for(COMPLAINTS_USER, username=current_user.username))
+    return render_template('complaint_new.html', title=f'{TITLE_COMPLAINT_NEW} - {current_user.username}', form=form)
 
 
 @app.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
 def profile(username):
-    template_title = _('Profile')
-    return render_template('profile.html', title=f'{template_title} - {username}')
+    return render_template('profile.html', title=f'{TITLE_USER_PROFILE} - {username}')
 
 
 @app.route('/add_new_area/<username>', methods=['GET', 'POST'])
@@ -230,8 +238,8 @@ def add_new_area(username):
         db.session.add(new_area)
         db.session.commit()
         flash('A new area was added to the department')
-        return redirect(url_for('profile', username=username))
-    return render_template('new_area.html', title=_('Add new area'), form=form)
+        return redirect(url_for(PROFILE, username=username))
+    return render_template('new_area.html', title=TITLE_ADD_NEW_AREA, form=form)
 
 
 @app.route('/download_csv', methods=['GET'])
@@ -246,33 +254,26 @@ def download_csv():
     return excel.make_response_from_dict(result, file_type='csv', file_name='InCom data.csv')
 
 
-@app.route('/ic_quantity_current_week', methods=['GET'])
-def ic_quantity_current_week():
+def current_workweek_dates():
     year = datetime.today().isocalendar()[0]
     week = datetime.today().isocalendar()[1]
-    all_week = {}
-    for x in range(1, 6):
-        day = datetime.strptime(f"{year}-W{week}-{x}", "%Y-W%W-%w").strftime("%d-%m-%Y")
-        all_week[day] = 0
+    workweek_dates = [datetime.strptime(f"{year}-W{week}-{x}", "%Y-W%W-%w").strftime("%d-%m-%Y") for x in range(1, 6)]
+    return workweek_dates
 
-    dates_query = InCom.query.with_entities(InCom.timestamp)
-    dates = [item.strftime("%d-%m-%Y") for t in dates_query for item in t]
 
-    dates_dict = dict(Counter(dates))
+@app.route('/ic_quantity_current_week', methods=['GET'])
+def ic_quantity_current_week():
+    all_timestaps = InCom.query.with_entities(InCom.timestamp)
+    current_week_dates = [date[0].strftime("%d-%m-%Y") for date in all_timestaps if
+                          date[0].isocalendar()[1] == datetime.today().isocalendar()[1]]
+    labels = current_workweek_dates()
+    values = list(Counter(current_week_dates).values())
 
-    to_chart = {**all_week, **dates_dict}
-    labels = []
-    values = []
-    for key in to_chart:
-        if key in all_week.keys():
-            labels.append(key)
-            values.append(to_chart[key])
     legend = [_('Number of internal complaints')]
     axis_x_label = [_('Days of current week')]
     axis_y_label = [_('IC quantity')]
-    return render_template('charts/bar_chart.html', title=_('IC quantity - current week'),
-                           labels=labels, values=values, legend=legend, axis_x_label=axis_x_label,
-                           axis_y_label=axis_y_label)
+    return render_template('charts/bar_chart.html', title=TITLE_IC_QUANTITY_CURRENT_WEEK, labels=labels, values=values,
+                           legend=legend, axis_x_label=axis_x_label, axis_y_label=axis_y_label)
 
 
 @app.route('/ic_quantity_all_weeks', methods=['GET'])
@@ -285,9 +286,8 @@ def ic_quantity_all_weeks():
     legend = [_('Number of internal complaints')]
     axis_x_label = [_('Weeks')]
     axis_y_label = [_('IC quantity')]
-    return render_template('charts/bar_chart.html', title=_('IC quantity - all weeks'),
-                           labels=labels, values=values, legend=legend,
-                           axis_x_label=axis_x_label, axis_y_label=axis_y_label)
+    return render_template('charts/bar_chart.html', title=TITLE_IC_QUANTITY_ALL_WEEKS, labels=labels, values=values,
+                           legend=legend, axis_x_label=axis_x_label, axis_y_label=axis_y_label)
 
 
 @app.route('/ic_quantity_by_cause', methods=['GET'])
@@ -300,9 +300,8 @@ def ic_quantity_by_cause():
     legend = [_('Number of internal complaints')]
 
     def random_hex_color():
-        rgb = lambda: random.randint(0, 255)
-        return '#%02X%02X%02X' % (rgb(), rgb(), rgb())
+        return f'#{os.urandom(3).hex()}'
 
     colors = [random_hex_color() for i in range(len(values))]
-    return render_template('charts/pie_chart.html', title=_('IC quantity - by cause'),
-                           labels=labels, values=values, legend=legend, colors=colors)
+    return render_template('charts/pie_chart.html', title=TITLE_IC_QUANTITY_BY_CAUSE, labels=labels, values=values,
+                           legend=legend, colors=colors)

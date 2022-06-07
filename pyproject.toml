@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "incom"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9.6"
+Flask-Excel = "^0.0.7"
+Flask = "^2.1.2"
+Flask-Babel = "^2.0.0"
+Flask-Login = "^0.6.1"
+Werkzeug = "^2.1.2"
+Flask-Migrate = "^3.1.0"
+Flask-Moment = "^1.0.2"
+Flask-WTF = "^1.0.1"
+email-validator = "^1.2.1"
+python-dotenv = "^0.20.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
