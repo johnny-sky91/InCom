@@ -4,7 +4,7 @@ from datetime import timezone, datetime
 
 import flask_excel as excel
 from flask import render_template, flash, redirect, url_for, request
-from flask_babel import _
+from flask_babel import _, lazy_gettext
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 
@@ -16,9 +16,9 @@ CLOSED = _('CLOSED')
 ACTIVE = _('ACTIVE')
 TITLE_SIGN_UP = _('Sign up')
 TITLE_LOGIN = _('Login')
-TITLE_COMPLAINTS_ALL = _('Complaints - all')
-TITLE_COMPLAINTS_USER = _('Complaints - user')
-TITLE_COMPLAINT_NEW = _('Complaint - new')
+TITLE_COMPLAINTS_ALL = lazy_gettext('Complaints - all')
+TITLE_COMPLAINTS_USER = lazy_gettext('Complaints - user')
+TITLE_COMPLAINT_NEW = lazy_gettext('Complaint - new')
 TITLE_REPORT_ID = _('Report ID:')
 TITLE_USER_PROFILE = _('Profile')
 TITLE_ADD_NEW_AREA = _('Add new area')

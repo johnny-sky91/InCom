@@ -38,8 +38,8 @@ class NewAreaForm(FlaskForm):
 
 
 class NewComplaintForm(FlaskForm):
-    order_number = StringField(lazy_gettext('Order number'), validators=[Regexp(r'\b\d{5}\b', message=lazy_gettext(
-        'Wrong order number (only 5 digits)'))])
+    order_number = StringField(lazy_gettext('Order number'), validators=[Regexp(r'\b\d{5}\b',
+                                                                     message=lazy_gettext('Wrong order number (only 5 digits)'))])
     product_type = SelectField(lazy_gettext('Product type'), validators=[DataRequired()])
     model = SelectField(lazy_gettext('Model'), validators=[DataRequired()])
     cause = SelectField(lazy_gettext('Cause'), validators=[DataRequired()])
