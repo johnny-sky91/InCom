@@ -12,8 +12,8 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, NewComplaintForm, NewAreaForm
 from app.models import User, InCom, DetectionAreas, Types, Models, Causes
 
-CLOSED = _('CLOSED')
-ACTIVE = _('ACTIVE')
+CLOSED = 'CLOSED'
+ACTIVE = 'ACTIVE'
 TITLE_SIGN_UP = _('Sign up')
 TITLE_LOGIN = _('Login')
 TITLE_COMPLAINTS_ALL = lazy_gettext('Complaints - all')
@@ -110,8 +110,12 @@ def data_for_table(query, column_list):
             order_number_link = os.environ.get('LINK').replace('to_replace', row["order_number"])
             order_number_link = f"<a href={order_number_link}>{row['order_number']}</a>"
         local_timestamp = row["timestamp"].replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%d/%m/%Y')
-
         user = User.query.filter_by(id=row["user_id"]).first().username
+
+        if row["complaint_status"] == 'CLOSED':
+            row["complaint_status"] = _('CLOSED')
+        else:
+            row["complaint_status"] = _('ACTIVE')
 
         row.update({'order_number': order_number_link, 'timestamp': local_timestamp, 'user_id': user})
 

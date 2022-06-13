@@ -2,8 +2,11 @@ from datetime import datetime
 
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_babel import _, lazy_gettext
 
 from app import db, login
+
+ACTIVE = 'ACTIVE'
 
 
 class User(UserMixin, db.Model):
@@ -32,7 +35,7 @@ class InCom(db.Model):
     cause = db.Column(db.String(255))
     detection_area = db.Column(db.String(255))
     description = db.Column(db.String(255))
-    complaint_status = db.Column(db.String(255), default='Active')
+    complaint_status = db.Column(db.String(255), default=ACTIVE)
 
     def __repr__(self):
         return f'RW: {self.id},{self.user_id},{self.timestamp},{self.order_number},{self.product_type},{self.model}, ' \
