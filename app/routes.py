@@ -22,9 +22,9 @@ TITLE_COMPLAINT_NEW = lazy_gettext('Complaint - new')
 TITLE_REPORT_ID = _('Report ID:')
 TITLE_USER_PROFILE = _('Profile')
 TITLE_ADD_NEW_AREA = _('Add new area')
-TITLE_IC_QUANTITY_CURRENT_WEEK = _('IC quantity - current week')
-TITLE_IC_QUANTITY_ALL_WEEKS = _('IC quantity - all weeks')
-TITLE_IC_QUANTITY_BY_CAUSE = _('IC quantity - by cause')
+TITLE_IC_QUANTITY_CURRENT_WEEK = lazy_gettext('IC quantity - current week')
+TITLE_IC_QUANTITY_ALL_WEEKS = lazy_gettext('IC quantity - all weeks')
+TITLE_IC_QUANTITY_BY_CAUSE = lazy_gettext('IC quantity - by cause')
 
 COMPLAINTS_ALL = 'complaints_all'
 COMPLAINTS_USER = 'complaints_user'
